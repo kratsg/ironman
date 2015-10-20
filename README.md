@@ -12,4 +12,4 @@ Since we will be predominantly using Twisted within the Zynq to manage the React
 
 ## Ideas
 
-- make it like twisted.web - we build Request objects which need to find Resource objects that provide actions (maybe too complicated, try and simplify?)
+- make it like twisted.web - we build Request objects which need to find Resource objects that provide actions (maybe too complicated, try and simplify?) [link](http://twistedmatrix.com/trac/browser/trunk/twisted/web)
