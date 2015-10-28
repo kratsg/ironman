@@ -35,5 +35,7 @@ def main():
 
   reactor.run()
 
+  reactor.stop()
+
 if __name__ == '__main__':
   main()
