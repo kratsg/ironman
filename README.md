@@ -1,6 +1,8 @@
-```
-pip install -r requirements.txt
-```
+# Ironman
+
+[![Build Status](https://travis-ci.org/kratsg/ironman.svg?branch=master)](https://travis-ci.org/kratsg/ironman)
+[![Coverage Status](https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github)](https://coveralls.io/github/kratsg/ironman?branch=master)
+[![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master)
 
 # Tutorial
 
