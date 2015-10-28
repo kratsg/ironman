@@ -22,13 +22,13 @@ long_description = read(os.path.join(here, 'README.rst'))#, 'CHANGES.txt')
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = []
+        self.test_args = ['--strict', '--verbose', '--tb=long', 'tests']
         self.test_suite = True
 
     def run_tests(self):
         import pytest
-        errcode = pytest.main(self.test_args)
-        sys.exit(errcode)
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 setup(name='ironman',
       version=ironman.__version__,
