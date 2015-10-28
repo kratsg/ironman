@@ -1,6 +1,7 @@
-::
+Ironman
+=======
 
-    pip install -r requirements.txt
+|Build Status| |Coverage Status| |Code Health|
 
 Tutorial
 ========
@@ -30,3 +31,10 @@ Testing
 ::
 
     tox
+
+.. |Build Status| image:: https://travis-ci.org/kratsg/ironman.svg?branch=master
+   :target: https://travis-ci.org/kratsg/ironman
+.. |Coverage Status| image:: https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/github/kratsg/ironman?branch=master
+.. |Code Health| image:: https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/kratsg/ironman/master
