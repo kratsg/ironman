@@ -12,5 +12,6 @@ test: clean build
         coverage html && \
         coverage report
 
+.PHONY: README.rst
 README.rst:
 	pandoc --from=markdown --to=rst --output=README.rst README.md
