@@ -3,11 +3,6 @@ Ironman
 
 |Build Status| |Coverage Status| |Code Health|
 
-.. figure:: http://i.imgur.com/qjeYbqX.png
-   :alt: Iron Man
-
-   Iron Man
-
 Tutorial
 ========
 
