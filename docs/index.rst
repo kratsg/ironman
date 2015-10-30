@@ -1,35 +1,22 @@
-Ironman
-========
+.. ironman documentation master file, created by
+   sphinx-quickstart on Fri Oct 30 12:51:21 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-Ironman is a general purpose software toolbox to be run
-on L1Calo hardware with embedded processors (SoCs).
+Welcome to ironman's documentation!
+===================================
 
-Look how easy it is to use:
+Contents:
 
-    import ironman
-    # Get your stuff done
-    ironman.engage()
+.. toctree::
+   :maxdepth: 2
 
-Features
---------
 
-- Be awesome
-- Make things faster
 
-Installation
-------------
+Indices and tables
+==================
 
-Install ironman by running:
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
-    pip install ironman
-
-Contribute
-----------
-
-- Issue Tracker: github.com/kratsg/ironman/issues
-- Source Code: github.com/kratsg/ironman
-
-Support
--------
-
-If you are having issues, please let us know.
