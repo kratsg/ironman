@@ -7,12 +7,14 @@ Twisted==15.4.0
 alabaster==0.7.6
 coverage==4.0.1
 docutils==0.12
+-e git+git@github.com:kratsg/ironman@298caee91e9276812980d71ffc209826778bfc0d#egg=ironman-master
 pluggy==0.3.1
 py==1.4.30
 pytest==2.8.2
 pytest-cov==2.2.0
 pytest-pythonpath==0.7
 pytz==2015.7
+repoze.sphinx.autointerface==0.7.1
 six==1.10.0
 snowballstemmer==1.2.0
 sphinx-rtd-theme==0.1.9
