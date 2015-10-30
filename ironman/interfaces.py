@@ -16,7 +16,7 @@ class IHistory(Interface):
         """ record both packets
         """
 
-class IIPbusPacket(Interface):
+class IIPBusPacket(Interface):
     """ IPBus Packet object
     """
     def protocol_version():
