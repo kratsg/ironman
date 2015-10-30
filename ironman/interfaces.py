@@ -1,4 +1,4 @@
-import zope.interface import Interface
+from zope.interface import Interface
 
 class IPacketStorage(Interface):
     """ Basic enhanced dictionary to centrally manage all packet data
