@@ -33,9 +33,10 @@ class IIPBusPacket(Interface):
 
     def packet_type():
         """ Type of packet
+
                 ======= ===============
                 Value   Type
-                ------- ---------------
+                ======= ===============
                 0x0     Control
                 0x1     Status
                 0x2     Re-send request
@@ -64,9 +65,10 @@ class IIPBusPacket(Interface):
         """
             Defines the direction and error state of the transaction
             request/response
+
                 ======= ======================================
                 Value   Meaning
-                ------- --------------------------------------
+                ======= ======================================
                 0x0     Request handled successfully by target
                 0x1     Bad header
                 0x2-3   Reserved
