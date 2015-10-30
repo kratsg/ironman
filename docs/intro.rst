@@ -22,7 +22,7 @@ Features
 Installation
 ------------
 
-Install ironman by running:
+Install ironman by running:::
 
     pip install ironman
 
