@@ -1,6 +1,6 @@
 from zope.interface.verify import verifyClass, verifyObject
 from ironman.packet import IPBusPacket
-from ironman.interfaces import IIPbusPacket
+from ironman.interfaces import IIPBusPacket
 
 def test_ipbus_packet_create():
     obj = IPBusPacket()
