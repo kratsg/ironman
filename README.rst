@@ -11,6 +11,9 @@ the Reactor workflow ("callbacks"), I suggest reading through `this
 tutorial <http://krondo.com/?page_id=1327>`__ on your own time to get up
 to speed on how it works and some details of sockets.
 
+I'm following the guide based on ``sandman``
+`here <https://www.jeffknupp.com/blog/2013/08/16/open-sourcing-a-python-project-the-right-way/>`__
+
 To Do
 -----
 
