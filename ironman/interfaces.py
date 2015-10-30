@@ -34,14 +34,14 @@ class IIPBusPacket(Interface):
     def packet_type():
         """ Type of packet
 
-                ======= ===============
-                Value   Type
-                ======= ===============
-                0x0     Control
-                0x1     Status
-                0x2     Re-send request
-                0x3-f   Reserved
-                ======= ===============
+            ======= ===============
+            Value   Type
+            ======= ===============
+            0x0     Control
+            0x1     Status
+            0x2     Re-send request
+            0x3-f   Reserved
+            ======= ===============
         """
 
     def transaction_id():
@@ -66,19 +66,19 @@ class IIPBusPacket(Interface):
             Defines the direction and error state of the transaction
             request/response
 
-                ======= ======================================
-                Value   Meaning
-                ======= ======================================
-                0x0     Request handled successfully by target
-                0x1     Bad header
-                0x2-3   Reserved
-                0x4     Bus error on read
-                0x5     Bus error on write
-                0x6     Bus timeout on read
-                0x7     Bus timeout on write
-                0x8-e   Reserved
-                0xf     Outbound request
-                ======= =======================================
+            ======= ======================================
+            Value   Meaning
+            ======= ======================================
+            0x0     Request handled successfully by target
+            0x1     Bad header
+            0x2-3   Reserved
+            0x4     Bus error on read
+            0x5     Bus error on write
+            0x6     Bus timeout on read
+            0x7     Bus timeout on write
+            0x8-e   Reserved
+            0xf     Outbound request
+            ======= ======================================
         """
 
     def data():
