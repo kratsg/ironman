@@ -75,7 +75,7 @@ class IIPbusPacket(Interface):
         """ The data blob in the packet
         """
 
-class IHardware(Interface):
+class IHardwareManager(Interface):
     """ Our Hardware Maps manager
     """
     def check_data(address, data):
