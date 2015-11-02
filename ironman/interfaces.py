@@ -1,4 +1,4 @@
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
 
 class IPacketStorage(Interface):
     """ Basic enhanced dictionary to centrally manage all packet data
@@ -19,6 +19,13 @@ class IHistory(Interface):
 class IIPBusPacket(Interface):
     """ IPBus Packet object
     """
+    blob = Attribute("The data blob that this packet corresponds to")
+
+    def __init__(blob):
+        """ Packet is initialized with a data blob
+            to decode
+        """
+
     def protocol_version():
         """ Protocol version
         """
