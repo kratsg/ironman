@@ -22,3 +22,27 @@ class IPBusPacket(object):
     def __pack():
         return struct.pack("{0:s}I".format(self.endianness), self.data)
 
+# an alternate way that is easier to manage!
+from construct import Struct, BitStruct, BitField
+
+data = '\xf0\x00\x00 \x0f\x01\x00 \x03\x00\x00\x00'
+#data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+
+# byte-swapping needed
+if (ord(data[0])&0xf0)>>4 == 0xf:
+    temp_data = []
+    for i in range(0, len(data), 4):
+        temp_data.append(''.join(reversed(data[i:i+4])))
+    data = ''.join(temp_data)
+
+ipbus_packet = Struct("IPBusPacket",
+                BitStruct("packet_header",
+                    BitField("protocol_version", 4),
+                    BitField("reserved", 4),
+                    BitField("packet_id", 16),
+                    BitField("byteorder", 4),
+                    BitField("packet_type", 4)
+                    )
+                )
+
+print ipbus_packet.parse(data)
