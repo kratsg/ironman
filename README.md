@@ -23,9 +23,9 @@ Look how easy it is to use
 - Be awesome
 - Make things faster
 
-## Getting Started
+# Getting Started
 
-### Installing
+## Installing
 
 Install ironman by running
 
@@ -33,7 +33,7 @@ Install ironman by running
 pip install ironman
 ```
 
-### Developing
+## Developing
 
 If it is your first time...
 
@@ -52,7 +52,19 @@ python setup.py develop
 pip uninstall ironman
 ```
 
-### Contributing
+### Testing
+
+```
+tox
+```
+
+or with
+
+```
+py.test
+```
+
+## Contributing
 
 - [Issue Tracker](https://github.com/kratsg/ironman/issues)
 - [Source Code](https://github.com/kratsg/ironman)
@@ -75,8 +87,4 @@ I'm following the guide based on `sandman` [here](https://www.jeffknupp.com/blog
 
 - make it like twisted.web - we build Request objects which need to find Resource objects that provide actions (maybe too complicated, try and simplify?) [link](http://twistedmatrix.com/trac/browser/trunk/twisted/web)
 
-# Testing
 
-```
-tox
-```
