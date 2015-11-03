@@ -6,6 +6,31 @@
 [![Coverage Status](https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github)](https://coveralls.io/github/kratsg/ironman?branch=master)
 [![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master)
 
+## Getting Started
+
+```
+pip install ironman
+```
+
+## Developing
+
+If it is your first time...
+
+```
+git clone git@github.com:kratsg/ironman
+cd ironman && mkvirtualenv ironman
+pip install -r requirements.txt
+```
+
+and then afterwards...
+
+```
+workon ironman
+python setup.py develop
+... do work here ...
+pip uninstall ironman
+```
+
 # Tutorial
 
 Since we will be predominantly using Twisted within the Zynq to manage the Reactor workflow ("callbacks"), I suggest reading through [this tutorial](http://krondo.com/?page_id=1327) on your own time to get up to speed on how it works and some details of sockets.
