@@ -28,7 +28,7 @@ Features
 Getting Started
 ---------------
 
-Installation
+Installating
 ~~~~~~~~~~~~
 
 Install ironman by running
