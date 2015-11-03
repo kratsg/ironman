@@ -13,9 +13,9 @@ Ironman is a general purpose software toolbox to be run on L1Calo hardware with 
 Look how easy it is to use
 
 ```
-    import ironman
-    # Get your stuff done
-    ironman.engage()
+import ironman
+# Get your stuff done
+ironman.engage()
 ```
 
 ## Features
