@@ -24,10 +24,10 @@ Features
 -  Make things faster
 
 Getting Started
----------------
+===============
 
 Installing
-~~~~~~~~~~
+----------
 
 Install ironman by running
 
@@ -36,7 +36,7 @@ Install ironman by running
     pip install ironman
 
 Developing
-~~~~~~~~~~
+----------
 
 If it is your first time...
 
@@ -55,8 +55,21 @@ and then afterwards...
     ... do work here ...
     pip uninstall ironman
 
+Testing
+~~~~~~~
+
+::
+
+    tox
+
+or with
+
+::
+
+    py.test
+
 Contributing
-~~~~~~~~~~~~
+------------
 
 -  `Issue Tracker <https://github.com/kratsg/ironman/issues>`__
 -  `Source Code <https://github.com/kratsg/ironman>`__
@@ -90,13 +103,6 @@ Ideas
    find Resource objects that provide actions (maybe too complicated,
    try and simplify?)
    `link <http://twistedmatrix.com/trac/browser/trunk/twisted/web>`__
-
-Testing
-=======
-
-::
-
-    tox
 
 .. |Build Status| image:: https://travis-ci.org/kratsg/ironman.svg?branch=master
    :target: https://travis-ci.org/kratsg/ironman
