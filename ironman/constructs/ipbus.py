@@ -41,7 +41,7 @@ ControlHeaderStruct = BitStruct("transaction",
 ReadStruct = Struct("read")
 
 WriteStruct = Struct("write",
-                Array(lambda ctx: ctx.words, UBInt32("data"))
+                Array(lambda ctx: ctx.transaction.words, UBInt32("data"))
 )
 
 """ X <= (X&A)|(B&(~A)) """
