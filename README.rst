@@ -24,10 +24,10 @@ Features
 -  Make things faster
 
 Getting Started
-===============
+---------------
 
 Installing
-----------
+~~~~~~~~~~
 
 Install ironman by running
 
@@ -36,7 +36,7 @@ Install ironman by running
     pip install ironman
 
 Developing
-----------
+~~~~~~~~~~
 
 If it is your first time...
 
@@ -56,7 +56,7 @@ and then afterwards...
     pip uninstall ironman
 
 Testing
-~~~~~~~
+^^^^^^^
 
 ::
 
@@ -69,18 +69,18 @@ or with
     py.test
 
 Contributing
-------------
+~~~~~~~~~~~~
 
 -  `Issue Tracker <https://github.com/kratsg/ironman/issues>`__
 -  `Source Code <https://github.com/kratsg/ironman>`__
 
 Support
--------
+~~~~~~~
 
 If you are having issues, let us know.
 
 Tutorial
-========
+--------
 
 Since we will be predominantly using Twisted within the Zynq to manage
 the Reactor workflow ("callbacks"), I suggest reading through `this
