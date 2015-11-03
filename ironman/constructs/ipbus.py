@@ -1,6 +1,5 @@
 from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32
 
-# define headers for ipbus packets
 PacketHeaderStruct = BitStruct("header",
                         BitField("protocol_version", 4),
                         BitField("reserved", 4),
@@ -12,6 +11,9 @@ PacketHeaderStruct = BitStruct("header",
                             RESEND = 0x2
                         )
 )
+"""
+Struct detailing the Packet Header logic
+"""
 
 ControlHeaderStruct = BitStruct("transaction",
                         BitField("protocol_version", 4),
@@ -37,29 +39,39 @@ ControlHeaderStruct = BitStruct("transaction",
                             REQUEST = 0xf
                         )
 )
+"""
+Struct detailing the Control Header logic
+"""
 
 ReadStruct = Struct("read")
+"""
+Struct detailing the Read Transaction logic
+"""
 
 WriteStruct = Struct("write",
                 Array(lambda ctx: ctx.transaction.words, UBInt32("data"))
 )
+"""
+Struct detailing the Write Transaction logic
+"""
 
 RMWBitsStruct = Struct("rmwbits",
                     UBInt32("and"),
                     UBInt32("or")
 )
 """
+Struct detailing the RMWBits Transaction logic
+
 Should compute via :math:`X \Leftarrow (X\wedge A)\\vee (B\wedge(!A))`
-
 """
-
 
 RMWSumStruct = Struct("rmwsum",
                 SBInt32("addend")  # note: signed 32-bit for subtraction!
 )
 """
-Should compute via :math:`X \Leftarrow X+A`
+Struct detailing the RMWSum Transaction logic
 
+Should compute via :math:`X \Leftarrow X+A`
 """
 
 ControlStruct = Struct("ControlTransaction",
@@ -78,10 +90,19 @@ ControlStruct = Struct("ControlTransaction",
                         }
                     ))
 )
+"""
+Struct detailing the Control Action logic
+"""
 
 StatusStruct = Struct("StatusTransaction", Array(15, UBInt32("data")))
+"""
+Struct detailing the Status Action logic
+"""
 
 ResendStruct = Struct("ResendTransaction")
+"""
+Struct detailing the Resend Action logic
+"""
 
 IPBusConstruct = Struct("IPBusPacket",
                     PacketHeaderStruct,  # defined as 'header' in context
@@ -93,3 +114,7 @@ IPBusConstruct = Struct("IPBusPacket",
                         }
                     )
 )
+"""
+Top-level IPBus Construct which is a packet parser/builder
+"""
+
