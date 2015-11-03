@@ -1,6 +1,13 @@
 ironman package
 ===============
 
+Subpackages
+-----------
+
+.. toctree::
+
+    ironman.constructs
+
 Submodules
 ----------
 
@@ -32,6 +39,14 @@ ironman.server module
 ---------------------
 
 .. automodule:: ironman.server
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ironman.utilities module
+------------------------
+
+.. automodule:: ironman.utilities
     :members:
     :undoc-members:
     :show-inheritance:
