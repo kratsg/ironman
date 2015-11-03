@@ -2,47 +2,46 @@
 # http://stackoverflow.com/questions/5189232/how-to-auto-register-a-class-when-its-defined
 
 from zope.interface import implements
-from ironman.interfaces import IIPBusPacket
+from interfaces import IIPBusPacket
+from utilities import byteswap
+
+from constructs import IPBusConstruct
 
 class IPBusPacket(object):
     implements(IIPBusPacket)
 
-    def __init__(blob):
-        self.blob = blob
-        self.data = []
-        self.endianness = ">" # assume big-endian
-        if not (self.__parse(self.blob[:4])>>4)&0xf == 0xf:
-            self.endianness = "<"
-        for i in range(0, len(blob), 4):
-            self.data.append(self.__unpack(i))
+    def __init__(self, blob):
+        self._blob = blob
+        # if little-endian, we need to swap when reading and writing
+        self.littleendian = bool((ord(self._blob[0])&0xf0)>>4 == 0xf)
 
-    def __unpack(start=0):
-        return struct.unpack("{0:s}I".format(self.endianness), blob[start:start+4])[0]
+    @property
+    def struct(self):
+        return IPBusConstruct.parse(self.blob)
 
-    def __pack():
-        return struct.pack("{0:s}I".format(self.endianness), self.data)
+    @property
+    def blob(self):
+        """ Return the big-endian datagram blob.
+        """
+        if self.littleendian:
+            return byteswap(self.raw)
+        return self.raw
 
-# an alternate way that is easier to manage!
-from construct import Struct, BitStruct, BitField
+    @property
+    def raw(self):
+        """ Return the raw datagram blob.
+        """
+        return self._blob
 
-data = '\xf0\x00\x00 \x0f\x01\x00 \x03\x00\x00\x00'
-#data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+    @property
+    def protocol_version():
+        return self.struct.header.protocol_version
 
-# byte-swapping needed
-if (ord(data[0])&0xf0)>>4 == 0xf:
-    temp_data = []
-    for i in range(0, len(data), 4):
-        temp_data.append(''.join(reversed(data[i:i+4])))
-    data = ''.join(temp_data)
+    def packet_id():
+        return self.struct.header.id
 
-ipbus_packet = Struct("IPBusPacket",
-                BitStruct("packet_header",
-                    BitField("protocol_version", 4),
-                    BitField("reserved", 4),
-                    BitField("packet_id", 16),
-                    BitField("byteorder", 4),
-                    BitField("packet_type", 4)
-                    )
-                )
+    def byteorder():
+        return self.struct.header.byteorder
 
-print ipbus_packet.parse(data)
+    def packet_type():
+        return self.struct.header.type_id
