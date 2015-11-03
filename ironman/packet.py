@@ -5,7 +5,7 @@ from zope.interface import implements
 from interfaces import IIPBusPacket
 from utilities import byteswap
 
-from constructs import IPBusConstruct
+from constructs.ipbus import IPBusConstruct
 
 class IPBusPacket(object):
     implements(IIPBusPacket)

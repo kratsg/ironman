@@ -1,1 +1,1 @@
-from ipbus import IPBusConstruct
+__all__ = ['ipbus']
