@@ -6,6 +6,8 @@
 [![Coverage Status](https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github)](https://coveralls.io/github/kratsg/ironman?branch=master)
 [![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master)
 
+[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://iron-man.readthedocs.org/en/latest/)
+
 ## Getting Started
 
 ```
