@@ -111,4 +111,4 @@ Ideas
 .. |Code Health| image:: https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat
    :target: https://landscape.io/github/kratsg/ironman/master
 .. |Docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
-   :target: http://iron-man.readthedocs.org/en/latest/
+   :target: http://iron-man.readthedocs.org/en/latest/intro.html
