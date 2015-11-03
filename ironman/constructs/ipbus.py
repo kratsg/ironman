@@ -48,13 +48,19 @@ RMWBitsStruct = Struct("rmwbits",
                     UBInt32("and"),
                     UBInt32("or")
 )
-""" X <= (X&A)|(B&(~A)) """
+"""
+Should compute via :math:`X \Leftarrow (X\wedge A)\\vee (B\wedge(!A))`
+
+"""
 
 
 RMWSumStruct = Struct("rmwsum",
                 SBInt32("addend")  # note: signed 32-bit for subtraction!
 )
-""" X<= X+A """
+"""
+Should compute via :math:`X \Leftarrow X+A`
+
+"""
 
 ControlStruct = Struct("ControlTransaction",
                     ControlHeaderStruct,
