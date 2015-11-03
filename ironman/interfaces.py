@@ -21,38 +21,13 @@ class IIPBusPacket(Interface):
     """
     _blob = Attribute("The data blob that this packet corresponds to")
     littleendian = Attribute("A flag dictating whether the datagram is received/sent in little-endian.")
-
-    def __init__(blob):
-        """ Packet is initialized with a data blob
-            to decode. Determine if it is big or little endian.
-        """
-
-    def struct():
-        """ The C-type struct representation of the packet.
-        """
-
-    def blob():
-        """ Return the big-endian datagram blob.
-        """
-
-    def raw():
-        """ Return the raw datagram blob.
-        """
-
-    def protocol_version():
-        """ Protocol version
-        """
-
-    def packet_id():
-        """ Packet ID
-        """
-
-    def byteorder():
-        """ Endian-ness
-        """
-
-    def packet_type():
-        """ Type of packet
+    struct = Attribute("The C-type struct representation of the packet.")
+    raw = Attribute("The raw datagram blob.")
+    blob = Attribute("The big-endian datagram blob.")
+    protocol_version = Attribute("The packet header protocol version. This does not check that the encapsulated transactions also match")
+    packet_id = Attribute("The id of the ipbus packet.")
+    byteorder = Attribute("The byte-order in the header. Should assert == 0xf.")
+    packet_type = Attribute("""The type of packet.
 
             ======= ===============
             Value   Type
@@ -61,7 +36,12 @@ class IIPBusPacket(Interface):
             0x1     Status
             0x2     Re-send request
             0x3-f   Reserved
-            ======= ===============
+            ======= ===============""")
+
+
+    def __init__(blob):
+        """ Packet is initialized with a data blob
+            to decode. Determine if it is big or little endian.
         """
 
 class IHardwareManager(Interface):
