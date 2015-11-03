@@ -34,14 +34,17 @@ class IPBusPacket(object):
         return self._blob
 
     @property
-    def protocol_version():
+    def protocol_version(self):
         return self.struct.header.protocol_version
 
-    def packet_id():
+    @property
+    def packet_id(self):
         return self.struct.header.id
 
-    def byteorder():
+    @property
+    def byteorder(self):
         return self.struct.header.byteorder
 
-    def packet_type():
+    @property
+    def packet_type(self):
         return self.struct.header.type_id
