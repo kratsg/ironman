@@ -64,7 +64,7 @@ class IHardwareManager(Interface):
         """ Look up the checksum for a given map name
         """
 
-    def add(map):
+    def add(hw_map):
         """ Add the Map object to the Hardware
         """
 

@@ -16,9 +16,8 @@ class HardwareManager(object):
     def get_checksum(self, map_name):
         pass
 
-    def add(self, map):
+    def add(self, hw_map):
         pass
 
 class HardwareMap(object):
     implements(IHardwareMap)
-    pass
