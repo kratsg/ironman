@@ -1,4 +1,4 @@
-ironman
+API Reference
 =======
 
 .. toctree::
