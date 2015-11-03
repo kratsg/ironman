@@ -1,4 +1,4 @@
-<img src="http://i.imgur.com/qjeYbqX.png" width="400" align="right" alt="iron man" />
+<img src="http://i.imgur.com/qjeYbqX.png" width="350" align="right" alt="iron man" />
 
 # Ironman
 
