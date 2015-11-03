@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    intro
+   cookbook
    modules
 
 Indices and tables
