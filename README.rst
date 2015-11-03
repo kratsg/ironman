@@ -11,7 +11,7 @@ hardware with embedded processors (SoCs).
 
 Look how easy it is to use
 
-::
+.. code:: python
 
     import ironman
     # Get your stuff done
