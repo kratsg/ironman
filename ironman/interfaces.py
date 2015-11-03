@@ -19,11 +19,24 @@ class IHistory(Interface):
 class IIPBusPacket(Interface):
     """ IPBus Packet object
     """
-    blob = Attribute("The data blob that this packet corresponds to")
+    _blob = Attribute("The data blob that this packet corresponds to")
+    littleendian = Attribute("A flag dictating whether the datagram is received/sent in little-endian.")
 
     def __init__(blob):
         """ Packet is initialized with a data blob
-            to decode
+            to decode. Determine if it is big or little endian.
+        """
+
+    def struct():
+        """ The C-type struct representation of the packet.
+        """
+
+    def blob():
+        """ Return the big-endian datagram blob.
+        """
+
+    def raw():
+        """ Return the raw datagram blob.
         """
 
     def protocol_version():
@@ -49,47 +62,6 @@ class IIPBusPacket(Interface):
             0x2     Re-send request
             0x3-f   Reserved
             ======= ===============
-        """
-
-    def transaction_id():
-        """ Transaction identification number
-                Client/target can track each transaction for a given packet
-        """
-
-    def num_words():
-        """ Number of 32-bit words within addressable memory space of the bus
-            itself that are interacted with
-
-            Defines read/write size of block reads/writes
-        """
-
-    def type_id():
-        """
-            Defines the type (read/write) of the IPBus transaction
-        """
-
-    def info_code():
-        """
-            Defines the direction and error state of the transaction
-            request/response
-
-            ======= ======================================
-            Value   Meaning
-            ======= ======================================
-            0x0     Request handled successfully by target
-            0x1     Bad header
-            0x2-3   Reserved
-            0x4     Bus error on read
-            0x5     Bus error on write
-            0x6     Bus timeout on read
-            0x7     Bus timeout on write
-            0x8-e   Reserved
-            0xf     Outbound request
-            ======= ======================================
-        """
-
-    def data():
-        """ The data blob in the packet
         """
 
 class IHardwareManager(Interface):
