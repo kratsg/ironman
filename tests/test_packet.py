@@ -58,20 +58,25 @@ class TestIPBusControlPacketSimpleParse:
     def test_length(self):
         assert len(self.packet.struct.data) == 1
 
-    @pytest.mark.parametrize("i,type_id", [(0, 'READ',)])
-    def test_transaction_type_id(self, i, type_id):
+    # specify details about inside packets
+    @pytest.fixture(params=[(0, 'READ', )], ids=["first"])
+    def packet_details(self, request):
+        return request.param
+
+    def test_transaction_type_id(self, packet_details):
+        i, type_id = packet_details
         assert self.packet.struct.data[i].transaction.type_id == type_id
 
-    @pytest.mark.parametrize("i", range(1))
-    def test_transaction_id(self, i):
+    def test_transaction_id(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.id == i
 
-    @pytest.mark.parametrize("i", range(1))
-    def test_transaction_num_words(self, i):
+    def test_transaction_num_words(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.words == 0x1
 
-    @pytest.mark.parametrize("i", range(1))
-    def test_transaction_info_code(self, i):
+    def test_transaction_info_code(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.info_code == 'REQUEST'
 
 class TestIPBusControlPacketComplexParse:
@@ -82,20 +87,24 @@ class TestIPBusControlPacketComplexParse:
     def test_length(self):
         assert len(self.packet.struct.data) == 3
 
-    @pytest.mark.parametrize("i,type_id", [(0, 'WRITE',), (1, 'WRITE', ), (2, 'READ', )])
-    def test_transaction_type_id(self, i, type_id):
+    @pytest.fixture(params=[(0, 'WRITE',), (1, 'WRITE', ), (2, 'READ', )], ids=["first", "second", "third"])
+    def packet_details(self, request):
+        return request.param
+
+    def test_transaction_type_id(self, packet_details):
+        i, type_id = packet_details
         assert self.packet.struct.data[i].transaction.type_id == type_id
 
-    @pytest.mark.parametrize("i", range(3))
-    def test_transaction_id(self, i):
+    def test_transaction_id(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.id == i
 
-    @pytest.mark.parametrize("i", range(3))
-    def test_transaction_num_words(self, i):
+    def test_transaction_num_words(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.words == 0x1
 
-    @pytest.mark.parametrize("i", range(3))
-    def test_transaction_info_code(self, i):
+    def test_transaction_info_code(self, packet_details):
+        i, _ = packet_details
         assert self.packet.struct.data[i].transaction.info_code == 'REQUEST'
 
 '''
