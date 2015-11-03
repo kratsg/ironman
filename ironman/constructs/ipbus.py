@@ -44,16 +44,17 @@ WriteStruct = Struct("write",
                 Array(lambda ctx: ctx.transaction.words, UBInt32("data"))
 )
 
-""" X <= (X&A)|(B&(~A)) """
 RMWBitsStruct = Struct("rmwbits",
                     UBInt32("and"),
                     UBInt32("or")
 )
+""" X <= (X&A)|(B&(~A)) """
 
-""" X<= X+A """
+
 RMWSumStruct = Struct("rmwsum",
                 SBInt32("addend")  # note: signed 32-bit for subtraction!
 )
+""" X<= X+A """
 
 ControlStruct = Struct("ControlTransaction",
                     ControlHeaderStruct,

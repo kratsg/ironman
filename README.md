@@ -4,17 +4,36 @@
 
 [![Build Status](https://travis-ci.org/kratsg/ironman.svg?branch=master)](https://travis-ci.org/kratsg/ironman)
 [![Coverage Status](https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github)](https://coveralls.io/github/kratsg/ironman?branch=master)
-[![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master)
+[![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://iron-man.readthedocs.org/en/latest/)
 
-[![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://iron-man.readthedocs.org/en/latest/)
+## What is Ironman?
+
+Ironman is a general purpose software toolbox to be run on L1Calo hardware with embedded processors (SoCs).
+
+Look how easy it is to use
+
+```
+    import ironman
+    # Get your stuff done
+    ironman.engage()
+```
+
+## Features
+
+- Be awesome
+- Make things faster
 
 ## Getting Started
+
+### Installing
+
+Install ironman by running
 
 ```
 pip install ironman
 ```
 
-## Developing
+### Developing
 
 If it is your first time...
 
@@ -32,6 +51,15 @@ python setup.py develop
 ... do work here ...
 pip uninstall ironman
 ```
+
+### Contributing
+
+- [Issue Tracker](https://github.com/kratsg/ironman/issues)
+- [Source Code](https://github.com/kratsg/ironman)
+
+## Support
+
+If you are having issues, let us know.
 
 # Tutorial
 
