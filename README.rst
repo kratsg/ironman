@@ -5,15 +5,40 @@ Ironman
 
 |Docs|
 
+What is Ironman?
+----------------
+
+Ironman is a general purpose software toolbox to be run on L1Calo
+hardware with embedded processors (SoCs).
+
+Look how easy it is to use
+
+::
+
+        import ironman
+        # Get your stuff done
+        ironman.engage()
+
+Features
+--------
+
+-  Be awesome
+-  Make things faster
+
 Getting Started
 ---------------
+
+Installation
+~~~~~~~~~~~~
+
+Install ironman by running
 
 ::
 
     pip install ironman
 
 Developing
-----------
+~~~~~~~~~~
 
 If it is your first time...
 
@@ -31,6 +56,17 @@ and then afterwards...
     python setup.py develop
     ... do work here ...
     pip uninstall ironman
+
+Contributing
+~~~~~~~~~~~~
+
+-  `Issue Tracker <https://github.com/kratsg/ironman/issues>`__
+-  `Source Code <https://github.com/kratsg/ironman>`__
+
+Support
+-------
+
+If you are having issues, let us know.
 
 Tutorial
 ========
