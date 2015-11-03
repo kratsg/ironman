@@ -23,9 +23,9 @@ ironman.engage()
 - Be awesome
 - Make things faster
 
-# Getting Started
+## Getting Started
 
-## Installing
+### Installing
 
 Install ironman by running
 
@@ -33,7 +33,7 @@ Install ironman by running
 pip install ironman
 ```
 
-## Developing
+### Developing
 
 If it is your first time...
 
@@ -52,7 +52,7 @@ python setup.py develop
 pip uninstall ironman
 ```
 
-### Testing
+#### Testing
 
 ```
 tox
@@ -64,16 +64,16 @@ or with
 py.test
 ```
 
-## Contributing
+### Contributing
 
 - [Issue Tracker](https://github.com/kratsg/ironman/issues)
 - [Source Code](https://github.com/kratsg/ironman)
 
-## Support
+### Support
 
 If you are having issues, let us know.
 
-# Tutorial
+## Tutorial
 
 Since we will be predominantly using Twisted within the Zynq to manage the Reactor workflow ("callbacks"), I suggest reading through [this tutorial](http://krondo.com/?page_id=1327) on your own time to get up to speed on how it works and some details of sockets.
 
