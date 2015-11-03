@@ -1,0 +1,3 @@
+ignore-paths:
+    - ironman/interfaces.py
+    - workbench/
