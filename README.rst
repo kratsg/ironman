@@ -1,9 +1,7 @@
 Ironman
 =======
 
-|Build Status| |Coverage Status| |Code Health|
-
-|Docs|
+|Build Status| |Coverage Status| |Code Health| |Docs|
 
 What is Ironman?
 ----------------
