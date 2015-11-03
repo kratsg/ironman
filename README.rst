@@ -3,6 +3,33 @@ Ironman
 
 |Build Status| |Coverage Status| |Code Health|
 
+Getting Started
+---------------
+
+::
+
+    pip install ironman
+
+Developing
+----------
+
+If it is your first time...
+
+::
+
+    git clone git@github.com:kratsg/ironman
+    cd ironman && mkvirtualenv ironman
+    pip install -r requirements.txt
+
+and then afterwards...
+
+::
+
+    workon ironman
+    python setup.py develop
+    ... do work here ...
+    pip uninstall ironman
+
 Tutorial
 ========
 
