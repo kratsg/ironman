@@ -21,16 +21,12 @@ class IPBusPacket(object):
 
     @property
     def blob(self):
-        """ Return the big-endian datagram blob.
-        """
         if self.littleendian:
             return byteswap(self.raw)
         return self.raw
 
     @property
     def raw(self):
-        """ Return the raw datagram blob.
-        """
         return self._blob
 
     @property
