@@ -6,6 +6,8 @@
 Welcome to ironman's documentation!
 ===================================
 
+This documentation is for at least |version|.
+
 Contents:
 
 .. toctree::
