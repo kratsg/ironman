@@ -1,7 +1,7 @@
 Ironman
 =======
 
-|Build Status| |Coverage Status| |Code Health| |Docs|
+|PyPI version| |Docs| |Build Status| |Coverage Status| |Code Health|
 
 What is Ironman?
 ----------------
@@ -117,11 +117,13 @@ Ideas
    try and simplify?)
    `link <http://twistedmatrix.com/trac/browser/trunk/twisted/web>`__
 
+.. |PyPI version| image:: https://badge.fury.io/py/ironman.svg
+   :target: https://badge.fury.io/py/ironman
+.. |Docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
+   :target: http://iron-man.readthedocs.org/en/latest/intro.html
 .. |Build Status| image:: https://travis-ci.org/kratsg/ironman.svg?branch=master
    :target: https://travis-ci.org/kratsg/ironman
 .. |Coverage Status| image:: https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github
    :target: https://coveralls.io/github/kratsg/ironman?branch=master
 .. |Code Health| image:: https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat
    :target: https://landscape.io/github/kratsg/ironman/master
-.. |Docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
-   :target: http://iron-man.readthedocs.org/en/latest/intro.html
