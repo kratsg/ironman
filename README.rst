@@ -1,7 +1,9 @@
 Ironman
 =======
 
-|PyPI version| |Docs| |Build Status| |Coverage Status| |Code Health|
+|PyPI version| |Docs|
+
+|Build Status| |Coverage Status| |Code Health|
 
 What is Ironman?
 ----------------
