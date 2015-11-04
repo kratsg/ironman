@@ -73,6 +73,14 @@ py.test
 
 If you are having issues, let us know.
 
+### Releasing
+
+1. Do some work on your package (i.e. fix bugs, add features, etc)
+1. Make sure the tests pass. Run `tox` (for just tests) `tox -e coverage` (for tests and coverage)
+1. Update the `__version__` number in your package's [__init__.py](ironman/__init__.py) file
+1. "Freeze" your code by creating a tag: `git tag -a x.y.z -m "Your message here..."`
+1. Run `python setup.py sdist` upload to upload the new version of your package to PyPI
+
 ## Tutorial
 
 Since we will be predominantly using Twisted within the Zynq to manage the Reactor workflow ("callbacks"), I suggest reading through [this tutorial](http://krondo.com/?page_id=1327) on your own time to get up to speed on how it works and some details of sockets.
