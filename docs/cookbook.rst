@@ -65,3 +65,15 @@ Because of duck-typing, any object can make do when passing into the construct b
 ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
 >>>
 
+Note that when building an IPBus Packet, an error would be raised if we cannot build it. For example, if we tried to bump the protocol version to a non-valid one
+
+>>> from ironman.constructs.ipbus import IPBusConstruct
+>>> data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+>>> p = IPBusConstruct.parse(data)
+>>> p.header.protocol_version = 0x0
+>>> new_data = IPBusConstruct.build(p)
+Traceback (most recent call last):
+    ...
+ValidationError: ('invalid object', 0)
+
+which is letting us know (not a very verbose error) that the :code:`0x0` value is wrong.
