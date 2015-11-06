@@ -2,6 +2,8 @@
    :alt: iron man
    :align: right
 
+<img src="http://i.imgur.com/WPQaFFu.png" align="right" alt="iron man" />
+
 Ironman
 =======
 
