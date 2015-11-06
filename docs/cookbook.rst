@@ -13,7 +13,7 @@ In the examples that follow, we will use (and assume) a `big-endian` aligned dat
 
 .. code-block:: python
 
-    data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+    data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
 
 which is a single read transaction request from the `base address` :code:`0x3`. In particular, it contains three 32-bit words:
 
@@ -29,7 +29,7 @@ Parsing an IPBus Packet
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> from ironman.constructs.ipbus import IPBusConstruct
->>> data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+>>> data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
 >>> p = IPBusConstruct.parse(data)
 >>> print p
 Container:
@@ -57,7 +57,7 @@ Building an IPBus Packet
 Because of duck-typing, any object can make do when passing into the construct builder. See the `construct` docs for more information here. In this case, we will take the original packet which has a packet id :code:`0x0` in the header and update it to :code:`0x1`
 
 >>> from ironman.constructs.ipbus import IPBusConstruct
->>> data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+>>> data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
 >>> p = IPBusConstruct.parse(data)
 >>> p.header.packet_id = 0x1
 >>> new_data = IPBusConstruct.build(p)
@@ -68,7 +68,7 @@ Because of duck-typing, any object can make do when passing into the construct b
 Note that when building an IPBus Packet, an error would be raised if we cannot build it. For example, if we tried to bump the protocol version to a non-valid one
 
 >>> from ironman.constructs.ipbus import IPBusConstruct
->>> data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+>>> data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
 >>> p = IPBusConstruct.parse(data)
 >>> p.header.protocol_version = 0x0
 >>> new_data = IPBusConstruct.build(p)
