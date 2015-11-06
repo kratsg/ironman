@@ -2,6 +2,7 @@ from zope.interface.verify import verifyClass, verifyObject
 from ironman.server import IPBusServerProtocol, IPBusServerFactory
 #from twisted.internet.interfaces import IProtocolFactory
 #from twisted.pair.raw import IRawDatagramProtocol
+from ironman.globals import TESTPACKETS, TESTRESPONSES
 
 # fixtures for passing in the objects
 import pytest
@@ -42,16 +43,15 @@ class TestIPBus:
         self.proto.transport = self.tr
         self.proto.startProtocol()
 
-    @pytest.mark.parametrize("inbound,expected,shouldPass", [
-        ("write", "written", True),
-        ("read", "value", True),
-        ("read", "fake", False),
+    @pytest.mark.parametrize("inbound,expected", [
+        (TESTPACKETS['big-endian'], TESTRESPONSES['big-endian']),
+        (TESTPACKETS['little-endian'], TESTRESPONSES['little-endian']),
     ])
-    def test_command(self, inbound, expected, shouldPass):
+    def test_command(self, inbound, expected):
         address, port = '127.0.0.1', 55555
         assert len(self.tr.written) == 0
 
         self.proto.datagramReceived(inbound, (address, port))
         msg, addr = self.tr.written[0]
-        assert (msg == expected) == shouldPass
+        assert msg == expected
         assert addr[1] == port
