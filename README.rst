@@ -1,5 +1,4 @@
-.. image:: http://i.imgur.com/qjeYbqX.png
-   :width: 350 px
+.. image:: http://i.imgur.com/WPQaFFu.png
    :alt: iron man
    :align: right
 
