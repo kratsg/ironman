@@ -1,10 +1,10 @@
-from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32
+from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32, OneOf
 
 PacketHeaderStruct = BitStruct("header",
                         BitField("protocol_version", 4),
-                        BitField("reserved", 4),
+                        OneOf(BitField("reserved", 4), [0x0]),
                         BitField("id", 16),
-                        BitField("byteorder", 4),
+                        OneOf(BitField("byteorder", 4), [0xf]),
                         Enum(BitField("type_id", 4),
                             CONTROL = 0x0,
                             STATUS = 0x1,
