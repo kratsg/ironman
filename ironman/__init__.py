@@ -4,3 +4,13 @@ __all__ = ['hardware',
            'packet',
            'server',
            'utilities']
+
+
+def engage():
+    ''' Fire thrusters.
+    '''
+    from ironman.server import IPBusServerProtocol
+    from twisted.internet import reactor
+    from twisted.internet.defer import Deferred
+    reactor.listenUDP(8888, IPBusServerProtocol(lambda: Deferred()))
+    reactor.run()
