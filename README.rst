@@ -15,9 +15,9 @@ Look how easy it is to use
 
 .. code:: python
 
-    import ironman
-    # Get your stuff done
-    ironman.engage()
+    >>> import ironman
+    >>> # Get your stuff done
+    >>> ironman.engage()
 
 Features
 --------
