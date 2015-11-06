@@ -10,7 +10,6 @@ def test_parse_big_endian():
 def test_fail_parsing_little_endian():
     with pytest.raises(ValidationError) as e:
         IPBusConstruct.parse(TESTPACKETS['little-endian'])
-    assert e.value.args == ('invalid object', 2)
 
 @pytest.mark.parametrize("data", [TESTPACKETS['big-endian'][:i] for i in range(4)])
 def test_bad_ipbus_packet_header(data):
@@ -18,3 +17,7 @@ def test_bad_ipbus_packet_header(data):
     """
     with pytest.raises(FieldError) as e:
         IPBusConstruct.parse(data)
+
+def test_bad_ipbus_version():
+    with pytest.raises(ValidationError) as e:
+        p = IPBusConstruct.parse(TESTPACKETS['wrong protocol version'])

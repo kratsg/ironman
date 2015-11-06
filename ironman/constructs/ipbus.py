@@ -1,7 +1,8 @@
 from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32, OneOf
+from ..globals import IPBUS_VERSION
 
 PacketHeaderStruct = BitStruct("header",
-                        BitField("protocol_version", 4),
+                        OneOf(BitField("protocol_version", 4), [IPBUS_VERSION]),
                         OneOf(BitField("reserved", 4), [0x0]),
                         BitField("id", 16),
                         OneOf(BitField("byteorder", 4), [0xf]),
