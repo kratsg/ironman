@@ -2,14 +2,18 @@
 from twisted.internet.protocol import ServerFactory, DatagramProtocol
 
 class IPBusServerProtocol(DatagramProtocol):
-    def datagramReceived(self, datagram, address):
-        print("Received datagram from {1:s} of length {0:d}".format(len(datagram), address))
-        if datagram == "write":
-            self.transport.write("written", address)
-        elif datagram == "read":
-            self.transport.write("value", address)
-        else:
-            self.transport.write(datagram, address)
+    def __init__(self, dgen):
+        self.d = dgen
 
-class IPBusServerFactory(ServerFactory):
-    protocol = IPBusServerProtocol
+    def datagramReceived(self, datagram, address):
+        """
+        After receiving a datagram, generate the deferreds and add myself to it.
+        """
+        def write(result):
+            print "Writing %r" % result
+            self.transport.write(result, address)
+
+        d = self.d()
+        #d.addCallbacks(write, log.err)
+        d.addCallback(write)  # errors are silently ignored!
+        d.callback(datagram)
