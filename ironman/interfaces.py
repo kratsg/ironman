@@ -24,7 +24,8 @@ class IIPBusPacket(Interface):
     struct = Attribute("The C-type struct representation of the packet.")
     raw = Attribute("The raw datagram blob.")
     blob = Attribute("The big-endian datagram blob.")
-    protocol_version = Attribute("The packet header protocol version. This does not check that the encapsulated transactions also match")
+    protocol_version = Attribute("The packet header protocol version. This does not check that the encapsulated transactions also match.")
+    reserved = Attribute("Reserved. Should be 0x0.")
     packet_id = Attribute("The id of the ipbus packet.")
     byteorder = Attribute("The byte-order in the header. Should assert == 0xf.")
     packet_type = Attribute("""The type of packet.
@@ -42,6 +43,14 @@ class IIPBusPacket(Interface):
     def __init__(blob):
         """ Packet is initialized with a data blob
             to decode. Determine if it is big or little endian.
+        """
+
+    def __eq__(other):
+        """ Define a way to identify two packets as being equivalent. Best way is to compare the underlying structs
+        """
+
+    def __ne__(other):
+        """ This should just be :code:`return not self.__eq__(other)`.
         """
 
 class IHardwareManager(Interface):

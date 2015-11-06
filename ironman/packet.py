@@ -34,6 +34,10 @@ class IPBusPacket(object):
         return self.struct.header.protocol_version
 
     @property
+    def reserved(self):
+        return self.struct.header.reserved
+
+    @property
     def packet_id(self):
         return self.struct.header.id
 
@@ -44,3 +48,10 @@ class IPBusPacket(object):
     @property
     def packet_type(self):
         return self.struct.header.type_id
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__)
+                and self.struct == other.struct)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)

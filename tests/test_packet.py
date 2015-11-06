@@ -36,7 +36,7 @@ class TestIPBusControlPacketParse:
         assert self.packet.protocol_version == IPBUS_VERSION
 
     def test_header_reserved(self):
-        assert self.packet.struct.header.reserved == 0x0
+        assert self.packet.reserved == 0x0
 
     def test_packet_id(self):
         assert self.packet.packet_id == 0x0
@@ -49,7 +49,7 @@ class TestIPBusControlPacketParse:
 
     def test_packet_swap(self):
         swapped_packet = IPBusPacket(byteswap(self.packet.raw))
-        assert self.packet.struct == swapped_packet.struct
+        assert self.packet == swapped_packet
 
 class TestIPBusControlPacketSimpleParse:
     @pytest.fixture(autouse=True)
