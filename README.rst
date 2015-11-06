@@ -1,12 +1,3 @@
-.. image:: http://i.imgur.com/WPQaFFu.png
-   :alt: iron man
-   :align: right
-
-.. raw:: html
-
-    <img src="http://i.imgur.com/WPQaFFu.png" align="right" alt="iron man" />
-
-
 Ironman
 =======
 
@@ -22,9 +13,11 @@ hardware with embedded processors (SoCs).
 
 Look how easy it is to use
 
->>> import ironman
->>> # Get your stuff done
->>> ironman.engage()
+.. code:: python
+
+    import ironman
+    # Get your stuff done
+    ironman.engage()
 
 Features
 --------
