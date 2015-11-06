@@ -54,14 +54,14 @@ Container:
 Building an IPBus Packet
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because of duck-typing, any object can make do when passing into the construct builder. See the `construct` docs for more information here. In this case, we will take the original packet which has a protocol version of :code:`0x2` in the header and update it to :code:`0x3`
+Because of duck-typing, any object can make do when passing into the construct builder. See the `construct` docs for more information here. In this case, we will take the original packet which has a packet id :code:`0x0` in the header and update it to :code:`0x1`
 
->>> from ironman.constructs import IPBusConstruct
+>>> from ironman.constructs.ipbus import IPBusConstruct
 >>> data = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
 >>> p = IPBusConstruct.parse(data)
->>> p.header.protocol_version = 0x3
+>>> p.header.packet_id = 0x1
 >>> new_data = IPBusConstruct.build(p)
 >>> print new_data.__repr__()
-'0\x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
+' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
 >>>
 
