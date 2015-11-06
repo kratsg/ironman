@@ -88,53 +88,31 @@ class TestIPBusControlPacketComplexParse:
     def test_length(self):
         assert len(self.packet.struct.data) == 3
 
-    @pytest.fixture(params=[(0, 'WRITE',), (1, 'WRITE', ), (2, 'READ', )], ids=["first", "second", "third"])
+    @pytest.fixture(params=[(0, 'WRITE', 0x6, [0x0]), (1, 'WRITE', 0x6, [0x1]), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
     def packet_details(self, request):
         return request.param
 
     def test_transaction_type_id(self, packet_details):
-        i, type_id = packet_details
+        i, type_id, _, _ = packet_details
         assert self.packet.struct.data[i].transaction.type_id == type_id
 
     def test_transaction_id(self, packet_details):
-        i, _ = packet_details
+        i, _, _, _ = packet_details
         assert self.packet.struct.data[i].transaction.id == i
 
     def test_transaction_num_words(self, packet_details):
-        i, _ = packet_details
+        i, _, _, _ = packet_details
         assert self.packet.struct.data[i].transaction.words == 0x1
 
     def test_transaction_info_code(self, packet_details):
-        i, _ = packet_details
+        i, _, _, _ = packet_details
         assert self.packet.struct.data[i].transaction.info_code == 'REQUEST'
 
-'''
-More complicated packet example:
-Handling Transaction
-    ['1f010020', '06000000', '00000000']
-    Handling Control Type: write
-        Location: 00000006
-        Value:  00000000
-Handling Transaction
-    ['1f010120', '06000000', '01000000']
-    Handling Control Type: write
-        Location: 00000006
-        Value:  00000001
-Handling Transaction
-    ['0f010220', '03000000']
-    Handling Control Type: read
-        1 32-bit words from
-        Location: 03000000
-============================================================
-|---------------------Outbound Message---------------------|
-|    From: ('0.0.0.0', 8888)                               |
-|    To  : ('128.135.152.116', 58367)                      |
-|    Data                                                  |
-|     |- Word 0    f0000020                                |
-|     |- Word 1    10010020                                |
-|     |- Word 2    10010120                                |
-|     |- Word 3    00010220                                |
-|     |- Word 4    01000000                                |
-|                                                          |
-============================================================
-'''
+    def test_transaction_address(self, packet_details):
+        i, type_id, address, _ = packet_details
+        assert self.packet.struct.data[i].address == address
+
+    def test_transaction_value(self, packet_details):
+        i, type_id, _, value = packet_details
+        # read transactions do not have a 'data' so should be None
+        assert getattr(self.packet.struct.data[i], 'data', None) == value
