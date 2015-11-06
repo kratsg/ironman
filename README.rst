@@ -1,3 +1,8 @@
+.. image:: http://i.imgur.com/qjeYbqX.png
+   :width: 350 px
+   :alt: iron man
+   :align: right
+
 Ironman
 =======
 
@@ -13,11 +18,9 @@ hardware with embedded processors (SoCs).
 
 Look how easy it is to use
 
-.. code:: python
-
-    import ironman
-    # Get your stuff done
-    ironman.engage()
+>>> import ironman
+>>> # Get your stuff done
+>>> ironman.engage()
 
 Features
 --------
