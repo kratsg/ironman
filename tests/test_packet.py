@@ -3,15 +3,12 @@ from ironman.packet import IPBusPacket
 from ironman.interfaces import IIPBusPacket
 from ironman.utilities import byteswap
 
-IPBUS_VERSION = 2
-BENDIAN_TESTPACKET = ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
-LENDIAN_TESTPACKET = '\xf0\x00\x00 \x0f\x01\x00 \x03\x00\x00\x00'
-COMPLEXCONTROL_TESTPACKET = '\xf0\x00\x00 \x1f\x01\x00 \x06\x00\x00\x00\x00\x00\x00\x00\x1f\x01\x01 \x06\x00\x00\x00\x01\x00\x00\x00\x0f\x01\x02 \x03\x00\x00\x00'
+from ironman.globals import IPBUS_VERSION, TESTPACKETS
 
 # fixtures for passing in the objects
 import pytest
 
-@pytest.mark.parametrize("data", [BENDIAN_TESTPACKET, LENDIAN_TESTPACKET], ids=["big-endian packet", "little-endian packet"])
+@pytest.mark.parametrize("data", [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']], ids=["big-endian packet", "little-endian packet"])
 def test_ipbus_packet_create(data):
     obj = IPBusPacket(data)
     assert obj is not None
@@ -20,14 +17,14 @@ def test_ipbus_packet_class_iface():
     # Assure the class implements the declared interface
     assert verifyClass(IIPBusPacket, IPBusPacket)
 
-@pytest.mark.parametrize("data", [BENDIAN_TESTPACKET, LENDIAN_TESTPACKET], ids=["big-endian packet", "little-endian packet"])
+@pytest.mark.parametrize("data", [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']], ids=["big-endian packet", "little-endian packet"])
 def test_ipbus_packet_instance_iface(data):
     # Assure instances of the class provide the declared interface
     assert verifyObject(IIPBusPacket, IPBusPacket(data))
 
 class TestIPBusControlPacketParse:
     @pytest.fixture(autouse=True,
-                    params=[BENDIAN_TESTPACKET, LENDIAN_TESTPACKET, COMPLEXCONTROL_TESTPACKET],
+                    params=[TESTPACKETS['big-endian'], TESTPACKETS['little-endian'], TESTPACKETS['complex control']],
                     ids=["big-endian packet", "little-endian packet", "complex control packet"])
     def init_packet(self, request):
         self.packet = IPBusPacket(request.param)
@@ -54,7 +51,7 @@ class TestIPBusControlPacketParse:
 class TestIPBusControlPacketSimpleParse:
     @pytest.fixture(autouse=True)
     def init_packet(self):
-        self.packet = IPBusPacket(BENDIAN_TESTPACKET)
+        self.packet = IPBusPacket(TESTPACKETS['big-endian'])
 
     def test_length(self):
         assert len(self.packet.struct.data) == 1
@@ -83,7 +80,7 @@ class TestIPBusControlPacketSimpleParse:
 class TestIPBusControlPacketComplexParse:
     @pytest.fixture(autouse=True)
     def init_packet(self):
-        self.packet = IPBusPacket(COMPLEXCONTROL_TESTPACKET)
+        self.packet = IPBusPacket(TESTPACKETS['complex control'])
 
     def test_length(self):
         assert len(self.packet.struct.data) == 3
