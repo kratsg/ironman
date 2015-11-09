@@ -120,18 +120,6 @@ class ICommunicationSlave(Interface):
         """ Parses address and returns what function to call
         """
 
-    def do_sdio():
-        """ Communicate over SDIO
-        """
-
-    def do_gpio():
-        """ Communicate over GPIO
-        """
-
-    def do_i2c():
-        """ Communicate over I2C
-        """
-
-    def do_spi():
-        """ Communicate over SPI
+    def __call__(packet):
+        """ A non-blocking I/O call passing along the packet
         """
