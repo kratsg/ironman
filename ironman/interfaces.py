@@ -80,6 +80,38 @@ class IHardwareManager(Interface):
 class IHardwareMap(Interface):
     """ Manages information about a single map, should be an overloaded dictionary
     """
+    doc = Attribute("The parsed XML document, effectively a dictionary whose keys are addressses and values are :class:`INode` objects.")
+
+    def __init__(xml):
+        """ Initialize a hardware map object by giving it the data to parse
+        """
+
+    def parse(xml):
+        """ Parse the xml hardware map data to set things up
+        """
+
+    def isOk():
+        """ Whether or not the given hardware map is ok. Should just be a loop over :func:`IHardwareNode.isOk`.
+        """
+
+class IHardwareNode(Interface):
+    """ Manages information about a single address. Simply a well-defined dictionary.
+    """
+    #description = Attribute("A description of the node.")
+    permissions = Attribute("Mark the node's read/write capabilities.")
+    allowed = Attribute("A list of allowed values for the node.")
+    disallowed = Attribute("A list of disallowed values for the node.")
+    readable = Attribute("Is the given node readable?")
+    writeable = Attribute("Is the given node writeable?")
+    isOk = Attribute("Is the given node ok? EG: can't set allowed and disallowed objects at the same time and cannot block a node from being readable.")
+
+    def __init__(node):
+        """ Initialize the node by giving it the parsed xml data
+        """
+
+    def isValueValid(val):
+        """ Whether the given value is a valid value for the node
+        """
 
 class ICommunicationSlave(Interface):
     """ Manages the communication with the programmable logic for us
