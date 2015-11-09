@@ -12,5 +12,5 @@ def engage():
     from ironman.server import IPBusServerProtocol
     from twisted.internet import reactor
     from twisted.internet.defer import Deferred
-    reactor.listenUDP(8888, IPBusServerProtocol(lambda: Deferred()))
+    reactor.listenUDP(8888, IPBusServerProtocol(Deferred))
     reactor.run()

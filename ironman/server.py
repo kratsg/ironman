@@ -1,5 +1,5 @@
 # Server Class managing requests over udp
-from twisted.internet.protocol import ServerFactory, DatagramProtocol
+from twisted.internet.protocol import DatagramProtocol
 
 class IPBusServerProtocol(DatagramProtocol):
     def __init__(self, dgen):
