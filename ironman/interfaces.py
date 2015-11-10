@@ -116,10 +116,33 @@ class IHardwareNode(Interface):
 class ICommunicationSlave(Interface):
     """ Manages the communication with the programmable logic for us
     """
+    def set_hardware_manager(hwmanager):
+        """ Set the hardware manager that the slave communications with
+        """
+
     def parse_address(address):
         """ Parses address and returns what function to call
         """
 
     def __call__(packet):
         """ A non-blocking I/O call passing along the packet
+
+            Returns the responses
+        """
+
+    def __transaction__(transaction):
+        """ Handle a single transaction and return the response
+        """
+
+class ICommunicationProtocol(Interface):
+    """ The interface that is expected for all methods of communication on the board
+
+        This should inherit from a class that implements ICommunicationSlave
+    """
+    def read(offset, size):
+        """ Read from the given address (offset) for N bytes (size)
+        """
+
+    def write(offset, value):
+        """ Write to the given address (offset) for N bytes (len(value))
         """

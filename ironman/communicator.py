@@ -5,7 +5,7 @@
 """
 
 from zope.interface import implements
-from ironman.interfaces import ICommunicationSlave
+from ironman.interfaces import ICommunicationSlave, ICommunicationProtocol
 
 class CommunicationSlaveManager(type):
     # we use __init__ rather than __new__ here because we want
@@ -31,11 +31,24 @@ class Jarvis(object):
     __metaclass__ = CommunicationSlaveManager
     implements(ICommunicationSlave)
 
-    def __init__(self, hwmanager):
+    def set_hardware_manager(self, hwmanager):
         self.hwmanager = hwmanager
 
     def parse_address(self, address):
-        return hwmanager.parse_address(address)
+        return self.hwmanager.parse_address(address)
 
     def __call__(self, packet):
-        return self.registry[self.parse_address(packet.transaction.address)]
+        for transaction in packet.data:
+            packet.response.append(self.__transaction__(transaction))
+        return packet
+
+    def __transaction__(self, transaction):
+        protocol = self.registry.get(self.parse_address(transaction.address), None)
+        if protocol is None:
+            KeyError(transaction.address)
+        protocol = protocol()
+        if transaction.type_id == 'READ':
+            return protocol.read(transaction.address, transaction.words)
+        elif transaction.type_id == 'WRITE':
+            return protocol.write(transaction.address, transaction.data)
+
