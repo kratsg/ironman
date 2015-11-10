@@ -41,12 +41,11 @@ Container:
         type_id = 'CONTROL'
     data = [
         Container:
-            transaction = Container:
-                protocol_version = 2
-                id = 0
-                words = 1
-                type_id = 'READ'
-                info_code = 'REQUEST'
+            protocol_version = 2
+            id = 0
+            words = 1
+            type_id = 'READ'
+            info_code = 'REQUEST'
             address = 3
     ]
 >>>
