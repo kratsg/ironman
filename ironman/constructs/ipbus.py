@@ -50,7 +50,7 @@ Struct detailing the Read Transaction logic
 """
 
 WriteStruct = Struct("write",
-                Array(lambda ctx: ctx.transaction.words, UBInt32("data"))
+                Array(lambda ctx: ctx.words, UBInt32("data"))
 )
 """
 Struct detailing the Write Transaction logic
@@ -76,9 +76,9 @@ Should compute via :math:`X \Leftarrow X+A`
 """
 
 ControlStruct = Struct("ControlTransaction",
-                    ControlHeaderStruct,
+                    Embed(ControlHeaderStruct),
                     UBInt32("address"),
-                    Embed(Switch("data", lambda ctx: ctx.transaction.type_id,
+                    Embed(Switch("data", lambda ctx: ctx.type_id,
                         {
                             "READ": ReadStruct,
                             "NOINCREAD": ReadStruct,

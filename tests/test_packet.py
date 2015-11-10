@@ -64,19 +64,19 @@ class TestIPBusControlPacketSimpleParse:
 
     def test_transaction_type_id(self, packet_details):
         i, type_id = packet_details
-        assert self.packet.struct.data[i].transaction.type_id == type_id
+        assert self.packet.struct.data[i].type_id == type_id
 
     def test_transaction_id(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].transaction.id == i
+        assert self.packet.struct.data[i].id == i
 
     def test_transaction_num_words(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].transaction.words == 0x1
+        assert self.packet.struct.data[i].words == 0x1
 
     def test_transaction_info_code(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].transaction.info_code == 'REQUEST'
+        assert self.packet.struct.data[i].info_code == 'REQUEST'
 
 class TestIPBusControlPacketComplexParse:
     @pytest.fixture(autouse=True)
@@ -92,19 +92,19 @@ class TestIPBusControlPacketComplexParse:
 
     def test_transaction_type_id(self, packet_details):
         i, type_id, _, _ = packet_details
-        assert self.packet.struct.data[i].transaction.type_id == type_id
+        assert self.packet.struct.data[i].type_id == type_id
 
     def test_transaction_id(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].transaction.id == i
+        assert self.packet.struct.data[i].id == i
 
     def test_transaction_num_words(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].transaction.words == 0x1
+        assert self.packet.struct.data[i].words == 0x1
 
     def test_transaction_info_code(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].transaction.info_code == 'REQUEST'
+        assert self.packet.struct.data[i].info_code == 'REQUEST'
 
     def test_transaction_address(self, packet_details):
         i, type_id, address, _ = packet_details
