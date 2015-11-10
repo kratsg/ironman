@@ -12,7 +12,7 @@ hwmanager = HardwareManager()
 
 class TestJarvis:
     def test_jarvis_create(self):
-        obj = Jarvis(hwmanager)
+        obj = Jarvis()
         assert obj is not None
 
     def test_jarvis_class_iface(self):
@@ -21,7 +21,7 @@ class TestJarvis:
 
     def test_jarvis_instance_iface(self):
         # Assure instances of the class provide the declared interface
-        assert verifyObject(ICommunicationSlave, Jarvis(hwmanager))
+        assert verifyObject(ICommunicationSlave, Jarvis())
 
 FileXML = \
 """<?xml version="1.0" encoding="ISO-8859-1"?>
@@ -45,6 +45,6 @@ class TestJarvisCommunication:
         self.j = Jarvis()
         self.j.set_hardware_manager(FakeManager())
 
-    def test_jarvis_packet():
+    def test_jarvis_packet(self):
         p = IPBusConstruct.parse(TESTPACKETS['big-endian'])
-        j(p)
+        self.j(p)
