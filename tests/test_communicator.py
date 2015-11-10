@@ -39,21 +39,6 @@ class FakeManager:
     def parse_address(self, addr):
         return 'file'
 
-class SimpleIO(Jarvis):
-    __route__ = 'file'
-    __f__ = '/Users/kratsg/Desktop/SimpleIO'
-    implements(ICommunicationProtocol)
-
-    def read(self, offset, size):
-        with open(self.__f__, 'rb') as f:
-            f.seek(offset)
-            return f.read(size)
-
-    def write(self, offset, data):
-        with open(self.__f__, 'r+b') as f:
-            f.seek(offset)
-            return f.write(data)
-
 class TestJarvisCommunication:
     @pytest.fixture(autouse=True)
     def set_up(self):
