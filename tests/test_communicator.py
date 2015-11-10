@@ -3,7 +3,7 @@ from ironman.communicator import Jarvis
 from ironman.interfaces import ICommunicationSlave
 from ironman.hardware import HardwareManager
 from ironman.globals import TESTPACKETS
-from ironman.constructs.ipbus import IPBusConstruct
+from ironman.packet import IPBusPacket
 from twisted.internet.defer import inlineCallbacks, returnValue
 
 import pytest
@@ -46,5 +46,5 @@ class TestJarvisCommunication:
         self.j.set_hardware_manager(FakeManager())
 
     def test_jarvis_packet(self):
-        p = IPBusConstruct.parse(TESTPACKETS['big-endian'])
+        p = IPBusPacket(TESTPACKETS['big-endian'])
         self.j(p)

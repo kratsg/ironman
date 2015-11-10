@@ -12,12 +12,16 @@ class IPBusPacket(object):
 
     def __init__(self, blob):
         self._blob = blob
+        self._struct = None
         # if little-endian, we need to swap when reading and writing
         self.littleendian = bool((ord(self._blob[0])&0xf0)>>4 == 0xf)
+        self.response = []
 
     @property
     def struct(self):
-        return IPBusConstruct.parse(self.blob)
+        if self._struct is None:
+            self._struct = IPBusConstruct.parse(self.blob)
+        return self._struct
 
     @property
     def blob(self):

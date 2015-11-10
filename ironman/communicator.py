@@ -38,7 +38,7 @@ class Jarvis(object):
         return self.hwmanager.parse_address(address)
 
     def __call__(self, packet):
-        for transaction in packet.data:
+        for transaction in packet.struct.data:
             packet.response.append(self.__transaction__(transaction))
         return packet
 

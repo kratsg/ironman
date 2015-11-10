@@ -20,6 +20,7 @@ class IIPBusPacket(Interface):
     """ IPBus Packet object
     """
     _blob = Attribute("The data blob that this packet corresponds to")
+    _struct = Attribute("The parsed construct for this packet")
     littleendian = Attribute("A flag dictating whether the datagram is received/sent in little-endian.")
     struct = Attribute("The C-type struct representation of the packet.")
     raw = Attribute("The raw datagram blob.")
@@ -38,6 +39,7 @@ class IIPBusPacket(Interface):
             0x2     Re-send request
             0x3-f   Reserved
             ======= ===============""")
+    response = Attribute("The data response to be passed along to another function that builds the response packet. This should be a list [] to append responses to.")
 
 
     def __init__(blob):
