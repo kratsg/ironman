@@ -32,8 +32,8 @@ class TestIPBus:
 
         from twisted.test import proto_helpers
         self.echo_proto = IPBusServerProtocol(lambda: Deferred())
-        #self.proto = IPBusServerProtocol(lambda: Deferred().addCallback(example_response))
-        self.proto = IPBusServerProtocol(lambda: Deferred())
+        self.proto = IPBusServerProtocol(lambda: Deferred().addCallback(example_response))
+        #self.proto = IPBusServerProtocol(lambda: Deferred())
         self.tr = proto_helpers.FakeDatagramTransport()
         for pr in [self.echo_proto, self.proto]:
             pr.transport = self.tr
