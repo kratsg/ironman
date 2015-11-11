@@ -1,10 +1,11 @@
 __version__ = '0.0.1'
-__all__ = ['hardware',
+__all__ = ['com_protocols',
+           'communicator',
+           'hardware',
            'interfaces',
            'packet',
            'server',
            'utilities']
-
 
 def engage():
     ''' Fire thrusters.
