@@ -27,8 +27,10 @@ class Jarvis(object):
         ...     __f__ = '/path/to/fileTwo'
         ...
         >>> # print the available registered classes
-        >>> print j.registry
-        {'fpgaOne': <class 'ironman.communicator.FileOne'>, 'fpgaTwo': <class 'ironman.communicator.FileTwo'>}
+        >>> import pprint
+        >>> pprint.pprint(j.registry)
+        {'fpgaOne': <class 'ironman.communicator.FileOne'>,
+         'fpgaTwo': <class 'ironman.communicator.FileTwo'>}
 
         Jarvis does the wrapping for :func:`Jarvis.register` so that a class defined at run-time is automatically inserted.
 
