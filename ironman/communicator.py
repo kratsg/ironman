@@ -17,25 +17,22 @@ class Jarvis(object):
             # create a Jarvis instance to manage what we want to register
             j = Jarvis()
 
-            # tell Jarvis to register this class' instance when we give it a route
-            @j.register
+            # tell Jarvis to register this class for the given route
+            @j.register('fpgaOne')
             class FileOne(SimpleIO):
                 __f__ = '/path/to/fileOne'
 
-            # tell Jarvis to register this class' instance when we give it a route
-            @j.register
+            # tell Jarvis to register this class for the given route
+            @j.register('fpgaTwo')
             class FileTwo(SimpleIO):
                 __f__ = '/path/to/fileTwo'
-
-            # simultaneously provide a route (`fpgaOne`, `fpgaTwo`) while instantiating the class
-            FileOne('fpgaOne')
-            FileTwo('fpgaTwo')
 
             # print the available registered classes
             print j.registry
 
         Jarvis does the wrapping for :func:`Jarvis.register` by writing a :class:`JarvisWrapper` class that wraps around the original class you define.
     """
+
     implements(ICommunicationSlave)
 
     def __init__(self):
@@ -55,28 +52,20 @@ class Jarvis(object):
     def __transaction__(self, transaction):
         protocol = self.registry.get(self.parse_address(transaction.address), None)
         if protocol is None:
-            KeyError(transaction.address)
+            raise KeyError(transaction.address)
         protocol = protocol()
         if transaction.type_id == 'READ':
             return protocol.read(transaction.address, transaction.words)
         elif transaction.type_id == 'WRITE':
             return protocol.write(transaction.address, transaction.data)
 
-    def register(self, cls):
-        def register_wrapper(route=None):
-            if route is None:
-                ValueError('Must specify a route')
-            if route in self.registry:
-                KeyError(route)
-            class JarvisWrapper(cls):
-                def __init__(inner_self, *cls_args, **cls_kwargs):
-                    self.registry[route] = inner_self
-                    super(JarvisWrapper, inner_self).__init__(*cls_args, **cls_kwargs)
-
-                def __repr__(inner_self):
-                    currRepr = super(JarvisWrapper, inner_self).__repr__()
-                    return currRepr.replace('ironman.communicator.JarvisWrapper', cls.__name__)
-            return JarvisWrapper()
+    def register(self, route):
+        if route is None:
+            raise ValueError('Must specify a route')
+        if route in self.registry:
+            raise KeyError("{0:s} is an existing route to {1:s}".format(route, self.registry[route].__name__))
+        def register_wrapper(cls):
+            self.registry[route] = cls
         return register_wrapper
 
 class SimpleIO(object):

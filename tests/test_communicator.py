@@ -47,10 +47,9 @@ class TestJarvisCommunication:
         self.f = tmpdir.mkdir("sub").join("hello.txt")
         self.f.write_binary("helloworld")
 
-        @self.j.register
+        @self.j.register('file')
         class TestIO(SimpleIO):
             __f__ = self.f.strpath
-        TestIO('file')
 
     def test_jarvis_packet(self, tmpdir):
         p = IPBusPacket(TESTPACKETS['big-endian'])
