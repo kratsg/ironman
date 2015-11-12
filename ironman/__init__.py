@@ -1,6 +1,5 @@
 __version__ = '0.0.1'
-__all__ = ['com_protocols',
-           'communicator',
+__all__ = ['communicator',
            'hardware',
            'interfaces',
            'packet',
