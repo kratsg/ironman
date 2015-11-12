@@ -11,24 +11,24 @@ class Jarvis(object):
     """ This is the general communication slave.
 
         Jarvis is what lets us pass around communications to various routes/protocols
-        while keeping the details separated from us. Here's an example of how one might use it::
+        while keeping the details separated from us. Here's an example of how one might use it:
 
-            from ironman.communicator import Jarvis, SimpleIO
-            # create a Jarvis instance to manage what we want to register
-            j = Jarvis()
-
-            # tell Jarvis to register this class for the given route
-            @j.register('fpgaOne')
-            class FileOne(SimpleIO):
-                __f__ = '/path/to/fileOne'
-
-            # tell Jarvis to register this class for the given route
-            @j.register('fpgaTwo')
-            class FileTwo(SimpleIO):
-                __f__ = '/path/to/fileTwo'
-
-            # print the available registered classes
-            print j.registry
+        >>> from ironman.communicator import Jarvis, SimpleIO
+        >>> # create a Jarvis instance to manage what we want to register
+        >>> j = Jarvis()
+        >>> # tell Jarvis to register this class for the given route
+        >>> @j.register('fpgaOne')
+        ... class FileOne(SimpleIO):
+        ...     __f__ = '/path/to/fileOne'
+        ...
+        >>> # tell Jarvis to register this class for the given route
+        >>> @j.register('fpgaTwo')
+        ... class FileTwo(SimpleIO):
+        ...     __f__ = '/path/to/fileTwo'
+        ...
+        >>> # print the available registered classes
+        >>> print j.registry
+        {'fpgaOne': <class 'ironman.communicator.FileOne'>, 'fpgaTwo': <class 'ironman.communicator.FileTwo'>}
 
         Jarvis does the wrapping for :func:`Jarvis.register` so that a class defined at run-time is automatically inserted.
 
