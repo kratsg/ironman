@@ -1,11 +1,10 @@
 from zope.interface.verify import verifyClass, verifyObject
-from ironman.communicator import Jarvis
+from ironman.communicator import Jarvis, SimpleIO
 from ironman.interfaces import ICommunicationSlave
 from ironman.hardware import HardwareManager
 from ironman.globals import TESTPACKETS
 from ironman.packet import IPBusPacket
 from twisted.internet.defer import inlineCallbacks, returnValue
-from ironman.com_protocols import SimpleIO
 
 import pytest
 
@@ -47,7 +46,11 @@ class TestJarvisCommunication:
         self.j.set_hardware_manager(FakeManager())
         self.f = tmpdir.mkdir("sub").join("hello.txt")
         self.f.write_binary("helloworld")
-        SimpleIO.__f__ = self.f.strpath
+
+        @self.j.register
+        class TestIO(SimpleIO):
+            __f__ = self.f.strpath
+        TestIO('file')
 
     def test_jarvis_packet(self, tmpdir):
         p = IPBusPacket(TESTPACKETS['big-endian'])

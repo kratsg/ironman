@@ -7,29 +7,39 @@
 from zope.interface import implements
 from ironman.interfaces import ICommunicationSlave, ICommunicationProtocol
 
-class CommunicationSlaveManager(type):
-    # we use __init__ rather than __new__ here because we want
-    # to modify attributes of the class *after* they have been
-    # created
-    def __init__(cls, name, bases, dct):
-        if not hasattr(cls, 'registry'):
-            # this is the base class.  Create an empty registry
-            cls.registry = {}
-        else:
-            # this is a derived class.  Add cls to the registry
-            cls.register()
-
-        super(CommunicationSlaveManager, cls).__init__(name, bases, dct)
-
-    def register(cls):
-        """ Register the given class in the slave as a route.
-            The route it matches should be given by __route__ in the class declaration.
-        """
-        cls.registry[cls.__route__] = cls
-
 class Jarvis(object):
-    __metaclass__ = CommunicationSlaveManager
+    """ This is the general communication slave.
+
+        Jarvis is what lets us pass around communications to various routes/protocols
+        while keeping the details separated from us. Here's an example of how one might use it::
+
+            from ironman.communicator import Jarvis, SimpleIO
+            # create a Jarvis instance to manage what we want to register
+            j = Jarvis()
+
+            # tell Jarvis to register this class' instance when we give it a route
+            @j.register
+            class FileOne(SimpleIO):
+                __f__ = '/path/to/fileOne'
+
+            # tell Jarvis to register this class' instance when we give it a route
+            @j.register
+            class FileTwo(SimpleIO):
+                __f__ = '/path/to/fileTwo'
+
+            # simultaneously provide a route (`fpgaOne`, `fpgaTwo`) while instantiating the class
+            FileOne('fpgaOne')
+            FileTwo('fpgaTwo')
+
+            # print the available registered classes
+            print j.registry
+
+        Jarvis does the wrapping for :func:`Jarvis.register` by writing a :class:`JarvisWrapper` class that wraps around the original class you define.
+    """
     implements(ICommunicationSlave)
+
+    def __init__(self):
+        self.registry = {}
 
     def set_hardware_manager(self, hwmanager):
         self.hwmanager = hwmanager
@@ -52,10 +62,26 @@ class Jarvis(object):
         elif transaction.type_id == 'WRITE':
             return protocol.write(transaction.address, transaction.data)
 
-class SimpleIO(Jarvis):
-    __route__ = 'file'
-    __f__ = None
+    def register(self, cls):
+        def register_wrapper(route=None):
+            if route is None:
+                ValueError('Must specify a route')
+            if route in self.registry:
+                KeyError(route)
+            class JarvisWrapper(cls):
+                def __init__(inner_self, *cls_args, **cls_kwargs):
+                    self.registry[route] = inner_self
+                    super(JarvisWrapper, inner_self).__init__(*cls_args, **cls_kwargs)
+
+                def __repr__(inner_self):
+                    currRepr = super(JarvisWrapper, inner_self).__repr__()
+                    return currRepr.replace('ironman.communicator.JarvisWrapper', cls.__name__)
+            return JarvisWrapper()
+        return register_wrapper
+
+class SimpleIO(object):
     implements(ICommunicationProtocol)
+    __f__ = None
 
     def read(self, offset, size):
         with open(self.__f__, 'rb') as f:
@@ -66,5 +92,3 @@ class SimpleIO(Jarvis):
         with open(self.__f__, 'r+b') as f:
             f.seek(offset)
             return f.write(data)
-
-
