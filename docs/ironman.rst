@@ -11,6 +11,22 @@ Subpackages
 Submodules
 ----------
 
+ironman.communicator module
+---------------------------
+
+.. automodule:: ironman.communicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ironman.globals module
+----------------------
+
+.. automodule:: ironman.globals
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 ironman.hardware module
 -----------------------
 
