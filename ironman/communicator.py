@@ -30,7 +30,8 @@ class Jarvis(object):
             # print the available registered classes
             print j.registry
 
-        Jarvis does the wrapping for :func:`Jarvis.register` by writing a :class:`JarvisWrapper` class that wraps around the original class you define.
+        Jarvis does the wrapping for :func:`Jarvis.register` so that a class defined at run-time is automatically inserted.
+
     """
 
     implements(ICommunicationSlave)
@@ -65,8 +66,15 @@ class Jarvis(object):
         if route in self.registry:
             raise KeyError("{0:s} is an existing route to {1:s}".format(route, self.registry[route].__name__))
         def register_wrapper(cls):
+            """ Duck-typing checks
+            """
+            getattr(cls, 'read')
+            getattr(cls, 'write')
             self.registry[route] = cls
         return register_wrapper
+
+    def unregister(self, route):
+        del self.registry[route]
 
 class SimpleIO(object):
     implements(ICommunicationProtocol)
