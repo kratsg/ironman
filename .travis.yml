@@ -7,6 +7,8 @@ install:
     - "pip install -r requirements.txt"
     - "pip install coveralls"
 script:
-    - "coverage run --source=ironman setup.py test"
+    - tox
+    - tox -e doctest-modules
+    - tox -e coverage
 after_success:
     coveralls
