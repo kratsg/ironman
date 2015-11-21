@@ -8,7 +8,5 @@ install:
     - "pip install coveralls"
 script:
     - tox
-    - tox -e doctest-modules
-    - tox -e coverage
 after_success:
     coveralls
