@@ -2,29 +2,44 @@ from zope.interface import implements
 from ironman.interfaces import IHardwareManager, IHardwareMap, IHardwareNode
 import xmltodict
 
-class HardwareManager(object):
+class HardwareManager(dict):
     implements(IHardwareManager)
 
     def check_data(self, address, data):
-        pass
+        key, hw_map = self.find_address(address, data)
+        return hw_map[address].isValueValid(data)
 
     def check_address(self, address):
-        pass
+        for key, hw_map in self.iteritems():
+            if address in hw_map:
+                return True
+        return False
 
     def find_address(self, address):
-        pass
+        for key, hw_map in self.iteritems():
+            if address in hw_map:
+                return key, hw_map
 
     def get_checksum(self, map_name):
         pass
 
-    def add(self, hw_map):
-        pass
+    def add(self, new_hw_map):
+        """
+            Add the HW map only if it doesn't exist for a given key, and no address collisions
+        """
+        if new_hw_map.key in self:
+            raise KeyError("HW Map already exists: {0:s}".format(new_hw_map.key))
+        for key, hw_map in self.iteritems():
+            for new_address in new_hw_map.iterkeys():
+                if new_address in hw_map:
+                    raise ValueError("Address 0x{0:08x} ({0:d}) in {1:s} already exists in {2:s}".format(new_address, new_hw_map.key, key))
+        # all ok, add it all
+        self[new_hw_map.key] = new_hw_map
 
 class HardwareMap(dict):
     implements(IHardwareMap)
 
     def __init__(self, xml, key):
-        self.doc = {}
         self.key = key
         self.parse(xml)
 
