@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<node id="TOP">
+    <node id="temperature" address="0x00000000" description="temperature">
+        <node id="offset" address="0x0" description="offset" permissions="1"/>
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccint" address="0x00000010" description="vccint">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccaux" address="0x00000020" description="vccaux">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccbram" address="0x00000030" description="vccbram">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccpint" address="0x00000040" description="vccpint">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccpaux" address="0x00000050" description="vccpaux">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vccoddr" address="0x00000060" description="vccoddr">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vrefp" address="0x00000070" description="vrefp">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+    <node id="vrefn" address="0x00000080" description="vrefn">
+        <node id="raw" address="0x1" description="raw" permissions="1"/>
+        <node id="scale" address="0x2" description="scale" permissions="1"/>
+    </node>
+</node>
