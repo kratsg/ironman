@@ -6,11 +6,11 @@ __all__ = ['communicator',
            'server',
            'utilities']
 
-def engage():
+def engage(proto='udp'):
     ''' Fire thrusters.
     '''
-    from ironman.server import IPBusServerProtocol
+    from ironman.server import ServerFactory
     from twisted.internet import reactor
     from twisted.internet.defer import Deferred
-    reactor.listenUDP(8888, IPBusServerProtocol(Deferred))
+    getattr(reactor, 'listen{0:s}'.format(proto.upper()))(8888, ServerFactory(proto, Deferred))
     reactor.run()
