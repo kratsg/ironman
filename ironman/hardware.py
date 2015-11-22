@@ -23,8 +23,9 @@ class HardwareManager(object):
 class HardwareMap(dict):
     implements(IHardwareMap)
 
-    def __init__(self, xml):
+    def __init__(self, xml, key):
         self.doc = {}
+        self.key = key
         self.parse(xml)
 
     def parse(self, xml):

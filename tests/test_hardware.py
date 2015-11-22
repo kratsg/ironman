@@ -49,7 +49,7 @@ class TestHardwareManager:
 class TestHardwareMap:
     @pytest.fixture(autouse=True)
     def init_map(self):
-        self.hwmap = HardwareMap(testXML)
+        self.hwmap = HardwareMap(testXML, 'test')
 
     def test_hardware_map_create(self):
         assert self.hwmap is not None

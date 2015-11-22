@@ -84,8 +84,8 @@ class IHardwareMap(Interface):
     """
     doc = Attribute("The parsed XML document, effectively a dictionary whose keys are addressses and values are :class:`INode` objects.")
 
-    def __init__(xml):
-        """ Initialize a hardware map object by giving it the data to parse
+    def __init__(xml, key):
+        """ Initialize a hardware map object by giving it the data to parse and associate it with a key (or route)
         """
 
     def parse(xml):
