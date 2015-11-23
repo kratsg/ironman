@@ -50,7 +50,7 @@ def buildResponsePacket(packet):
     data += PacketHeaderStruct.build(packet.struct.header)
     for transaction, response in zip(packet.struct.data, packet.response):
         data += ControlHeaderStruct.build(transaction)
-        data += response.encode("hex")
+        data += response.encode("hex").decode("hex")
     return data
 
 
