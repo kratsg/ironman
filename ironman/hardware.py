@@ -7,17 +7,20 @@ class HardwareManager(dict):
     raw_maps = {}
 
     def check_data(self, address, data):
-        node = self.find_address(address)
-        if node: return node.isValueValid(data)
-        else: return False
+        node = self.get_node(address)
+        return node.isValueValid(data)
 
     def check_address(self, address):
-        node = self.find_address(address)
-        if node: return True
-        else: return False
+        return not isinstance(self.get_node(address), NullHardwareNode)
 
     def find_address(self, address):
-        return self.get(address, {})
+        return self.get(address, NullHardwareNode())
+
+    def get_route(self, address):
+        return self.get_node(address).hw_map.route
+
+    def get_node(self, address):
+        return self.get(address, NullHardwareNode())
 
     def get_checksum(self, map_name):
         pass
@@ -41,8 +44,14 @@ class HardwareManager(dict):
         """
             Remove the route entirely.
         """
-        for address in self.raw_maps.pop(route, {}).iterkeys():
-            self.pop(address, None)
+        for address in self.raw_maps.pop(route, NullHardwareMap()).iterkeys():
+            self.pop(address, NullHardwareNode())
+
+class NullHardwareMap(dict):
+    implements(IHardwareMap)
+    route = None
+    def parse(self, xml): pass
+    def isOk(self): return False
 
 class HardwareMap(dict):
     implements(IHardwareMap)
@@ -66,14 +75,26 @@ class HardwareMap(dict):
                     childAddress = int(child['@address'], 16)
                     absAddress = nodeAddress+childAddress
                     if absAddress in self: raise KeyError(child['@id'])
-                    self[nodeAddress+childAddress] = HardwareNode(child)
+                    self[nodeAddress+childAddress] = HardwareNode(child, self)
             else:
-                self[nodeAddress] = HardwareNode(node)
+                self[nodeAddress] = HardwareNode(node, self)
 
     def isOk(self):
         for k,v in self.iteritems():
             if not v.isOk(): return False
         return True
+
+class NullHardwareNode(dict):
+    implements(IHardwareNode)
+
+    hw_map = NullHardwareMap()
+    readable = False
+    writeable = False
+    isValueValid = False
+    isOk = False
+    permissions = set()
+    allowed = set()
+    disallowed = set()
 
 class HardwareNode(dict):
     implements(IHardwareNode)

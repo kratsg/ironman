@@ -64,7 +64,7 @@ class TestHardwareMap:
 
 class TestHardwareNodeInterface:
     def test_hardware_node_create(self):
-        obj = HardwareNode({'@permissions': 2})
+        obj = HardwareNode({'@permissions': 2}, {})
         assert obj is not None
 
     def test_hardware_node_class_iface(self):
@@ -73,7 +73,7 @@ class TestHardwareNodeInterface:
 
     def test_hardware_node_instance_iface(self):
         # Assure instances of the class provide the declared interface
-        assert verifyObject(IHardwareNode, HardwareNode({}))
+        assert verifyObject(IHardwareNode, HardwareNode({}, {}))
 
 class TestHardwareNode:
     @pytest.fixture(autouse=True, params=[
@@ -84,7 +84,7 @@ class TestHardwareNode:
     ])
     def init_node(self, request):
         self.data = request.param
-        self.node = HardwareNode(request.param)
+        self.node = HardwareNode(request.param, {})
 
     def test_permissions(self):
         assert self.node.permissions == self.data.get('@permissions')
@@ -97,3 +97,6 @@ class TestHardwareNode:
 
     def test_not_ok(self):
         assert self.node.isOk == self.data.get('isOk')
+
+    def test_hw_map(self):
+        assert self.node.hw_map == {}
