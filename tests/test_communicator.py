@@ -15,7 +15,7 @@ class TestJarvis:
     def set_up(self):
         # this checks a simple communication that works
         class FakeManager:
-            def parse_address(self, addr):
+            def get_route(self, addr):
                 return 'file'
 
         self.j = Jarvis()
