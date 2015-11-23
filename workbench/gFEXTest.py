@@ -44,10 +44,20 @@ class XADCController(ComplexIO):
                 130: __base__+"in_voltage7_vrefn_scale"
             }
 
+from constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
+def buildResponsePacket(packet):
+    data = ''
+    data+ = PacketHeaderStruct.build(packet.struct)
+    for transaction, response in zip(packet.struct.data, packet.response):
+        data += ControlHeaderStruct.build(transaction)
+        data += response.encode("hex")
+    return data
+
+
 from ironman.server import ServerFactory
 from ironman.packet import IPBusPacket
 from twisted.internet import reactor
 from twisted.internet.defer import Deferred
 
-reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j)))
+reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket)))
 reactor.run()
