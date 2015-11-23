@@ -27,20 +27,20 @@ class HardwareManager(dict):
         """
             Add the HW map only if it doesn't exist for a given key, and no address collisions
         """
-        if new_hw_map.key in self:
-            raise KeyError("HW Map already exists: {0:s}".format(new_hw_map.key))
-        for key, hw_map in self.iteritems():
+        if new_hw_map.route in self:
+            raise KeyError("HW Map already exists: {0:s}".format(new_hw_map.route))
+        for route, hw_map in self.iteritems():
             for new_address in new_hw_map.iterkeys():
                 if new_address in hw_map:
-                    raise ValueError("Address 0x{0:08x} ({0:d}) in {1:s} already exists in {2:s}".format(new_address, new_hw_map.key, key))
+                    raise ValueError("Address 0x{0:08x} ({0:d}) in {1:s} already exists in {2:s}".format(new_address, new_hw_map.route, route))
         # all ok, add it all
-        self[new_hw_map.key] = new_hw_map
+        self[new_hw_map.route] = new_hw_map
 
 class HardwareMap(dict):
     implements(IHardwareMap)
 
-    def __init__(self, xml, key):
-        self.key = key
+    def __init__(self, xml, route):
+        self.route = route
         self.parse(xml)
 
     def parse(self, xml):

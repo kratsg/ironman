@@ -58,21 +58,26 @@ class IIPBusPacket(Interface):
 class IHardwareManager(Interface):
     """ Our Hardware Maps manager
     """
-    def check_data(address, data):
-        """ Given an address, checks if the data is
-            a valid value to write
+
+    def get_node(address):
+        """ Given an address, return the node associated with it
+        """
+
+    def get_route(address):
+        """ Given an address, return the route for it
+        """
+
+    def get_checksum(route):
+        """ Look up the checksum for a given map name (route)
         """
 
     def check_address(address):
         """ Given an address, checks if it is valid
         """
 
-    def find_address(address):
-        """ Look up an address, return Error if cannot find
-        """
-
-    def get_checksum(map_name):
-        """ Look up the checksum for a given map name
+    def check_data(address, data):
+        """ Given an address, checks if the data is
+            a valid value to write
         """
 
     def add(hw_map):
@@ -82,10 +87,10 @@ class IHardwareManager(Interface):
 class IHardwareMap(Interface):
     """ Manages information about a single map, should be an overloaded dictionary
     """
-    doc = Attribute("The parsed XML document, effectively a dictionary whose keys are addressses and values are :class:`INode` objects.")
+    route = Attribute("The route associated for this hardware map.")
 
-    def __init__(xml, key):
-        """ Initialize a hardware map object by giving it the data to parse and associate it with a key (or route)
+    def __init__(xml, route):
+        """ Initialize a hardware map object by giving it the data to parse and associate it with a route
         """
 
     def parse(xml):
@@ -106,9 +111,10 @@ class IHardwareNode(Interface):
     readable = Attribute("Is the given node readable?")
     writeable = Attribute("Is the given node writeable?")
     isOk = Attribute("Is the given node ok? EG: can't set allowed and disallowed objects at the same time and cannot block a node from being readable.")
+    hw_map = Attribute("The hardware map this is associated with.")
 
-    def __init__(node):
-        """ Initialize the node by giving it the parsed xml data
+    def __init__(node, hw_map):
+        """ Initialize the node by giving it the parsed xml data as well as the hw_map
         """
 
     def isValueValid(val):
@@ -136,10 +142,8 @@ class ICommunicationSlave(Interface):
         """ Handle a single transaction and return the response
         """
 
-class ICommunicationProtocol(Interface):
-    """ The interface that is expected for all methods of communication on the board
-
-        This should inherit from a class that implements ICommunicationSlave
+class ICommunicationDriver(Interface):
+    """ The standard driver that is expected for all methods of communication on the board
     """
     def read(offset, size):
         """ Read from the given address (offset) for N bytes (size)
