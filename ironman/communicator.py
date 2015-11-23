@@ -85,7 +85,7 @@ class SimpleIO(object):
     def read(self, offset, size):
         with open(self.__f__, 'rb') as f:
             f.seek(offset)
-            return f.read(size)
+            return f.read(4*size)
 
     def write(self, offset, data):
         with open(self.__f__, 'r+b') as f:
@@ -98,7 +98,7 @@ class ComplexIO(object):
 
     def read(self, offset, size):
         with open(self.__f__.get(offset), 'rb') as f:
-            return f.read(size)
+            return f.read(4*size)
 
     def write(self, offset, data):
         with open(self.__f__.get(offset), 'r+b') as f:
