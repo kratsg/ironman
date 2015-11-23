@@ -59,6 +59,8 @@ class IHardwareManager(Interface):
     """ Our Hardware Maps manager
     """
 
+    raw_maps = Attribute("A dictionary of the maps added so we can keep track which makes it easier to add and remove.")
+
     def get_node(address):
         """ Given an address, return the node associated with it
         """
@@ -82,6 +84,10 @@ class IHardwareManager(Interface):
 
     def add(hw_map):
         """ Add the Map object to the Hardware
+        """
+
+    def subtract(route):
+        """ Remove the route from the hardware manager
         """
 
 class IHardwareMap(Interface):

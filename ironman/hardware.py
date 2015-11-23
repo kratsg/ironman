@@ -4,21 +4,20 @@ import xmltodict
 
 class HardwareManager(dict):
     implements(IHardwareManager)
+    raw_maps = {}
 
     def check_data(self, address, data):
-        key, hw_map = self.find_address(address, data)
-        return hw_map[address].isValueValid(data)
+        node = self.find_address(address)
+        if node: return node.isValueValid(data)
+        else: return False
 
     def check_address(self, address):
-        for key, hw_map in self.iteritems():
-            if address in hw_map:
-                return True
-        return False
+        node = self.find_address(address)
+        if node: return True
+        else: return False
 
     def find_address(self, address):
-        for key, hw_map in self.iteritems():
-            if address in hw_map:
-                return key, hw_map
+        return self.get(address, {})
 
     def get_checksum(self, map_name):
         pass
@@ -27,14 +26,23 @@ class HardwareManager(dict):
         """
             Add the HW map only if it doesn't exist for a given key, and no address collisions
         """
-        if new_hw_map.route in self:
+        new_route = new_hw_map.route
+        if new_route in self.raw_maps:
             raise KeyError("HW Map already exists: {0:s}".format(new_hw_map.route))
-        for route, hw_map in self.iteritems():
-            for new_address in new_hw_map.iterkeys():
-                if new_address in hw_map:
-                    raise ValueError("Address 0x{0:08x} ({0:d}) in {1:s} already exists in {2:s}".format(new_address, new_hw_map.route, route))
+
+        common_addresses = set(self).intersection(new_hw_map)
+        if common_addresses:
+            raise ValueError("An address in {0:s} already exists in the manager".format(new_route))
         # all ok, add it all
-        self[new_hw_map.route] = new_hw_map
+        self.raw_maps[new_route] = new_hw_map
+        self.update(new_hw_map)
+
+    def subtract(self, route):
+        """
+            Remove the route entirely.
+        """
+        for address in self.raw_maps.pop(route, {}).iterkeys():
+            self.pop(address, None)
 
 class HardwareMap(dict):
     implements(IHardwareMap)
@@ -70,11 +78,12 @@ class HardwareMap(dict):
 class HardwareNode(dict):
     implements(IHardwareNode)
 
-    def __init__(self, node):
+    def __init__(self, node, hw_map):
         #self['description'] = getattr(node, '@description', '')
         self['permissions'] = int(node.get('@permissions', 0))
         self['allowed'] = node.get('@allowed', [])
         self['disallowed'] = node.get('disallowed', ['-1'])
+        self.hw_map = hw_map
 
     @property
     def readable(self):
