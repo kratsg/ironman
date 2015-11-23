@@ -47,7 +47,7 @@ class XADCController(ComplexIO):
 from constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
 def buildResponsePacket(packet):
     data = ''
-    data+ = PacketHeaderStruct.build(packet.struct)
+    data += PacketHeaderStruct.build(packet.struct)
     for transaction, response in zip(packet.struct.data, packet.response):
         data += ControlHeaderStruct.build(transaction)
         data += response.encode("hex")
