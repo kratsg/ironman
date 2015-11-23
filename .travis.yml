@@ -7,7 +7,6 @@ install:
     - "pip install -r requirements.txt"
     - "pip install coveralls"
 script:
-    - py.test --cov={envsitepackagesdir}/ironman --doctest-glob='docs/*.rst' --strict --verbose --tb=long docs tests
-    - py.test --doctest-modules --strict --verbose --tb=long ironman
+    - coverage run --source=ironman setup.py test
 after_success:
     coveralls
