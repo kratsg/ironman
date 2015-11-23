@@ -45,7 +45,7 @@ class Jarvis(object):
         self.hwmanager = hwmanager
 
     def parse_address(self, address):
-        return self.hwmanager.parse_address(address)
+        return self.hwmanager.get_route(address)
 
     def __call__(self, packet):
         for transaction in packet.struct.data:
@@ -90,4 +90,16 @@ class SimpleIO(object):
     def write(self, offset, data):
         with open(self.__f__, 'r+b') as f:
             f.seek(offset)
+            return f.write(data)
+
+class ComplexIO(object):
+    implements(ICommunicationDriver)
+    __f__ = {}
+
+    def read(self, offset, size):
+        with open(self.__f__.get(offset), 'rb') as f:
+            return f.read(size)
+
+    def write(self, offset, data):
+        with open(self.__f__.get(offset), 'r+b') as f:
             return f.write(data)
