@@ -44,7 +44,7 @@ class XADCController(ComplexIO):
                 130: __base__+"in_voltage7_vrefn_scale"
             }
 
-from constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
+from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
 def buildResponsePacket(packet):
     data = ''
     data += PacketHeaderStruct.build(packet.struct)
