@@ -5,7 +5,7 @@
 """
 
 from zope.interface import implements
-from ironman.interfaces import ICommunicationSlave, ICommunicationProtocol
+from ironman.interfaces import ICommunicationSlave, ICommunicationDriver
 
 class Jarvis(object):
     """ This is the general communication slave.
@@ -79,7 +79,7 @@ class Jarvis(object):
         del self.registry[route]
 
 class SimpleIO(object):
-    implements(ICommunicationProtocol)
+    implements(ICommunicationDriver)
     __f__ = None
 
     def read(self, offset, size):
