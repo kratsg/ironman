@@ -11,51 +11,44 @@ class IPBusPacket(object):
     implements(IIPBusPacket)
 
     def __init__(self, blob):
-        self._blob = blob
-        self._struct = None
+        self.request = None
+        self.response = None
+        self._raw = blob
         # if little-endian, we need to swap when reading and writing
-        self.littleendian = bool((ord(self._blob[0])&0xf0)>>4 == 0xf)
-        self.response = []
-
-    @property
-    def struct(self):
-        if self._struct is None:
-            self._struct = IPBusConstruct.parse(self.blob)
-        return self._struct
-
-    @property
-    def blob(self):
-        if self.littleendian:
-            return byteswap(self.raw)
-        return self.raw
+        self.littleendian = bool((ord(self._raw[0])&0xf0)>>4 == 0xf)
+        # do some flipping
+        raw = self.raw
+        if self.littleendian: raw = byteswap(raw)
+        self.request = IPBusConstruct.parse(raw)
+        self.response = IPBusConstruct.parse(raw)
 
     @property
     def raw(self):
-        return self._blob
+        return self._raw
 
     @property
     def protocol_version(self):
-        return self.struct.header.protocol_version
+        return self.request.header.protocol_version
 
     @property
     def reserved(self):
-        return self.struct.header.reserved
+        return self.request.header.reserved
 
     @property
     def packet_id(self):
-        return self.struct.header.id
+        return self.request.header.id
 
     @property
     def byteorder(self):
-        return self.struct.header.byteorder
+        return self.request.header.byteorder
 
     @property
     def packet_type(self):
-        return self.struct.header.type_id
+        return self.request.header.type_id
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__)
-                and self.struct == other.struct)
+                and self.request == other.request)
 
     def __ne__(self, other):
         return not self.__eq__(other)

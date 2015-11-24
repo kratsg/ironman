@@ -55,7 +55,7 @@ class TestIPBusControlPacketSimpleParse:
         self.packet = IPBusPacket(TESTPACKETS['big-endian'])
 
     def test_length(self):
-        assert len(self.packet.struct.data) == 1
+        assert len(self.packet.request.data) == 1
 
     # specify details about inside packets
     @pytest.fixture(params=[(0, 'READ', )], ids=["first"])
@@ -64,19 +64,19 @@ class TestIPBusControlPacketSimpleParse:
 
     def test_transaction_type_id(self, packet_details):
         i, type_id = packet_details
-        assert self.packet.struct.data[i].type_id == type_id
+        assert self.packet.request.data[i].type_id == type_id
 
     def test_transaction_id(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].id == i
+        assert self.packet.request.data[i].id == i
 
     def test_transaction_num_words(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].words == 0x1
+        assert self.packet.request.data[i].words == 0x1
 
     def test_transaction_info_code(self, packet_details):
         i, _ = packet_details
-        assert self.packet.struct.data[i].info_code == 'REQUEST'
+        assert self.packet.request.data[i].info_code == 'REQUEST'
 
 class TestIPBusControlPacketComplexParse:
     @pytest.fixture(autouse=True)
@@ -84,7 +84,7 @@ class TestIPBusControlPacketComplexParse:
         self.packet = IPBusPacket(TESTPACKETS['complex control'])
 
     def test_length(self):
-        assert len(self.packet.struct.data) == 3
+        assert len(self.packet.request.data) == 3
 
     @pytest.fixture(params=[(0, 'WRITE', 0x6, [0x0]), (1, 'WRITE', 0x6, [0x1]), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
     def packet_details(self, request):
@@ -92,25 +92,25 @@ class TestIPBusControlPacketComplexParse:
 
     def test_transaction_type_id(self, packet_details):
         i, type_id, _, _ = packet_details
-        assert self.packet.struct.data[i].type_id == type_id
+        assert self.packet.request.data[i].type_id == type_id
 
     def test_transaction_id(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].id == i
+        assert self.packet.request.data[i].id == i
 
     def test_transaction_num_words(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].words == 0x1
+        assert self.packet.request.data[i].words == 0x1
 
     def test_transaction_info_code(self, packet_details):
         i, _, _, _ = packet_details
-        assert self.packet.struct.data[i].info_code == 'REQUEST'
+        assert self.packet.request.data[i].info_code == 'REQUEST'
 
     def test_transaction_address(self, packet_details):
         i, type_id, address, _ = packet_details
-        assert self.packet.struct.data[i].address == address
+        assert self.packet.request.data[i].address == address
 
     def test_transaction_value(self, packet_details):
         i, type_id, _, value = packet_details
         # read transactions do not have a 'data' so should be None
-        assert getattr(self.packet.struct.data[i], 'data', None) == value
+        assert getattr(self.packet.request.data[i], 'data', None) == value

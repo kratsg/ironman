@@ -19,12 +19,11 @@ class IHistory(Interface):
 class IIPBusPacket(Interface):
     """ IPBus Packet object
     """
-    _blob = Attribute("The data blob that this packet corresponds to")
-    _struct = Attribute("The parsed construct for this packet")
-    littleendian = Attribute("A flag dictating whether the datagram is received/sent in little-endian.")
-    struct = Attribute("The C-type struct representation of the packet.")
+    request = Attribute("The parsed request packet")
+    response = Attribute("The parsed response packet")
+    _raw = Attribute("The raw request packet")
     raw = Attribute("The raw datagram blob.")
-    blob = Attribute("The big-endian datagram blob.")
+    littleendian = Attribute("A flag dictating whether the datagram is received/sent in little-endian.")
     protocol_version = Attribute("The packet header protocol version. This does not check that the encapsulated transactions also match.")
     reserved = Attribute("Reserved. Should be 0x0.")
     packet_id = Attribute("The id of the ipbus packet.")
