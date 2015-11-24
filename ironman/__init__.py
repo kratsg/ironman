@@ -1,6 +1,7 @@
 __version__ = '0.2.0'
 __all__ = ['communicator',
            'hardware',
+           'history',
            'interfaces',
            'packet',
            'server',

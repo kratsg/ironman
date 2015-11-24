@@ -1,19 +1,11 @@
 from zope.interface import Interface, Attribute
 
-class IPacketStorage(Interface):
-    """ Basic enhanced dictionary to centrally manage all packet data
-    """
-
-    def record(packet):
-        """ record the packet
-        """
-
 class IHistory(Interface):
     """ Enhanced dictionary to store inbound and outbound packet pairs
     """
 
-    def record(inbound_packet, outbound_packet):
-        """ record both packets
+    def record(packet):
+        """ record the packet
         """
 
 class IIPBusPacket(Interface):
