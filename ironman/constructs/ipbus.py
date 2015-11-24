@@ -137,7 +137,7 @@ IPBusConstruct = Struct("IPBusPacket",
                     Switch("data", lambda ctx: ctx.header.type_id,
                         {
                             "CONTROL" : GreedyRange(ControlStruct),
-                            "STATUS" : StatusStruct,
+                            "STATUS" : StatusRequestStruct,
                             "RESEND" : ResendStruct,
                         }
                     )
