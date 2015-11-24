@@ -1,4 +1,4 @@
-from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32, OneOf
+from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32, OneOf, Pass
 from ..globals import IPBUS_VERSION
 
 PacketHeaderStruct = BitStruct("header",
@@ -44,21 +44,40 @@ ControlHeaderStruct = BitStruct("transaction",
 Struct detailing the Control Header logic
 """
 
-ReadStruct = Struct("read")
+ReadStruct = Struct("read",
+                Embed(Switch("data", lambda ctx: ctx.info_code,
+                    {
+                        "REQUEST": Pass,
+                        "SUCCESS": Array(lambda ctx: ctx.words, UBInt32("data"))
+                    },
+                    default = Pass
+                ))
+)
 """
 Struct detailing the Read Transaction logic
 """
 
 WriteStruct = Struct("write",
-                Array(lambda ctx: ctx.words, UBInt32("data"))
+                Embed(Switch("data", lambda ctx: ctx.info_code,
+                    {
+                        "REQUEST": Array(lambda ctx: ctx.words, UBInt32("data")),
+                        "SUCCESS": Pass
+                    },
+                    default = Pass
+                ))
 )
 """
 Struct detailing the Write Transaction logic
 """
 
 RMWBitsStruct = Struct("rmwbits",
-                    UBInt32("and"),
-                    UBInt32("or")
+                Embed(Switch("data", lambda ctx: ctx.info_code,
+                    {
+                        "REQUEST": Embed(Struct("data", UBInt32("and"), UBInt32("or"))),
+                        "SUCCESS": UBInt32("data")
+                    },
+                    default = Pass
+                ))
 )
 """
 Struct detailing the RMWBits Transaction logic
@@ -67,7 +86,14 @@ Should compute via :math:`X \Leftarrow (X\wedge A)\\vee (B\wedge(!A))`
 """
 
 RMWSumStruct = Struct("rmwsum",
-                SBInt32("addend")  # note: signed 32-bit for subtraction!
+                Embed(Switch("data", lambda ctx: ctx.info_code,
+                    {
+                        "REQUEST": SBInt32("addend"),  # note: signed 32-bit for subtraction!
+                        "SUCCESS": UBInt32("data")
+                    },
+                    default = Pass
+                ))
+
 )
 """
 Struct detailing the RMWSum Transaction logic
@@ -95,7 +121,8 @@ ControlStruct = Struct("ControlTransaction",
 Struct detailing the Control Action logic
 """
 
-StatusStruct = Struct("StatusTransaction", Array(15, UBInt32("data")))
+StatusRequestStruct = Struct("StatusTransaction", Array(15, OneOf(UBInt32("data"), [0])))
+StatusResponseStruct = Struct("StatusTransaction", Array(15, UBInt32("data")))
 """
 Struct detailing the Status Action logic
 """
