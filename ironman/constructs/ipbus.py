@@ -1,6 +1,8 @@
 from construct import Array, BitField, BitStruct, Embed, Enum, GreedyRange, Struct, Switch, UBInt32, SBInt32, OneOf, Pass
 from ..globals import IPBUS_VERSION
 
+from ironman.utilities import PrintContext
+
 PacketHeaderStruct = BitStruct("header",
                         OneOf(BitField("protocol_version", 4), [IPBUS_VERSION]),
                         OneOf(BitField("reserved", 4), [0x0]),
@@ -45,39 +47,39 @@ Struct detailing the Control Header logic
 """
 
 ReadStruct = Struct("read",
-                Embed(Switch("data", lambda ctx: ctx.info_code,
+                Switch("data", lambda ctx: ctx.info_code,
                     {
                         "REQUEST": Pass,
                         "SUCCESS": Array(lambda ctx: ctx.words, UBInt32("data"))
                     },
                     default = Pass
-                ))
+                )
 )
 """
 Struct detailing the Read Transaction logic
 """
 
 WriteStruct = Struct("write",
-                Embed(Switch("data", lambda ctx: ctx.info_code,
+                Switch("data", lambda ctx: ctx.info_code,
                     {
                         "REQUEST": Array(lambda ctx: ctx.words, UBInt32("data")),
                         "SUCCESS": Pass
                     },
                     default = Pass
-                ))
+                )
 )
 """
 Struct detailing the Write Transaction logic
 """
 
 RMWBitsStruct = Struct("rmwbits",
-                Embed(Switch("data", lambda ctx: ctx.info_code,
+                Switch("data", lambda ctx: ctx.info_code,
                     {
                         "REQUEST": Embed(Struct("data", UBInt32("and"), UBInt32("or"))),
                         "SUCCESS": UBInt32("data")
                     },
                     default = Pass
-                ))
+                )
 )
 """
 Struct detailing the RMWBits Transaction logic
@@ -86,14 +88,13 @@ Should compute via :math:`X \Leftarrow (X\wedge A)\\vee (B\wedge(!A))`
 """
 
 RMWSumStruct = Struct("rmwsum",
-                Embed(Switch("data", lambda ctx: ctx.info_code,
+                Switch("data", lambda ctx: ctx.info_code,
                     {
                         "REQUEST": SBInt32("addend"),  # note: signed 32-bit for subtraction!
                         "SUCCESS": UBInt32("data")
                     },
                     default = Pass
-                ))
-
+                )
 )
 """
 Struct detailing the RMWSum Transaction logic

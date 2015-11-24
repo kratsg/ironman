@@ -47,6 +47,7 @@ Container:
             type_id = 'READ'
             info_code = 'REQUEST'
             address = 3
+            data = None
     ]
 >>>
 
@@ -60,7 +61,7 @@ Because of duck-typing, any object can make do when passing into the construct b
 >>> p = IPBusConstruct.parse(data)
 >>> p.header.packet_id = 0x1
 >>> new_data = IPBusConstruct.build(p)
->>> print new_data.__repr__()
+>>> print repr(new_data)
 ' \x00\x00\xf0 \x00\x01\x0f\x00\x00\x00\x03'
 >>>
 
@@ -76,3 +77,25 @@ Traceback (most recent call last):
 ValidationError: ('invalid object', 0)
 
 which is letting us know (not a very verbose error) that the :code:`0x0` value is wrong.
+
+Creating a Response Packet
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As seen from the above examples, we have a read packet. Let's pretend the response is ``1234``. How do we build a response packet?
+
+>>> from ironman.constructs.ipbus import IPBusConstruct
+>>> in_data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
+>>> in_p = IPBusConstruct.parse(in_data)
+>>> out_p = in_p
+>>> out_p.data[0].data = [int("1234".encode("hex"), 16)]
+>>> out_data = IPBusConstruct.build(out_p)
+Traceback (most recent call last):
+    ...
+AssertionError: assert [825373492] is None
+>>> out_p.data[0].info_code = 'SUCCESS'
+>>> out_data = IPBusConstruct.build(out_p)
+>>> print repr(out_data)
+' \x00\x00\xf0 \x00\x01\x00\x00\x00\x00\x031234'
+>>>
+
+and our work is done! Notice that it's not just a matter of setting the data field and building the packet.. we must also set the ``info_code`` field to a ``SUCCESS`` to signify that we're sending a *successful* response back.
