@@ -48,8 +48,12 @@ class Jarvis(object):
         return self.hwmanager.get_route(address)
 
     def __call__(self, packet):
-        for transaction, response in zip(packet.request.data, packet.response.data):
-            response.data = self.__transaction__(transaction)
+        """
+            Handle CONTROL packets
+        """
+        if packet.request.header.type_id == 'CONTROL':
+            for transaction, response in zip(packet.request.data, packet.response.data):
+                response.data = self.__transaction__(transaction)
         return packet
 
     def __transaction__(self, transaction):
