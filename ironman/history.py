@@ -13,8 +13,8 @@ class History(dict):
 
     def record(self, packet):
         # Attempt to delete from history only if we are removing from queue
-        if len(a) >= self.maxlen:
-            delete self[self.packets[0].request.header.id]
+        if len(self.packets) >= self.maxlen:
+            del self[self.packets[0].request.header.id]
         # Add new packet to history
         self.packets.append(packet)
         self[packet.request.header.id] = (IPBusConstruct.build(packet.request), IPBusConstruct.build(packet.response))
