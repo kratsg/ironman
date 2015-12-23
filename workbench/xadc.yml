@@ -3,9 +3,9 @@ nodes:
         id: temperature
         address: 0x00000000
         nodes:
-            - &offset {id: offset, address: 0x0, permissions=1}
-            - &raw {id: raw, address: 0x1, permissions=1}
-            - &scale {id: scale, address=0x2, permissions=1}
+            - &offset {id: offset, address: 0x0, permissions: 1}
+            - &raw {id: raw, address: 0x1, permissions: 1}
+            - &scale {id: scale, address: 0x2, permissions: 1}
     -
         id: vccint
         address: 0x00000010

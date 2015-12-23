@@ -1,6 +1,6 @@
 from zope.interface import implements
 from ironman.interfaces import IHardwareManager, IHardwareMap, IHardwareNode
-import xmltodict
+import yaml
 
 class HardwareManager(dict):
     implements(IHardwareManager)
@@ -50,34 +50,30 @@ class HardwareManager(dict):
 class NullHardwareMap(dict):
     implements(IHardwareMap)
     route = None
-    def parse(self, xml): pass
+    def parse(self, yml): pass
     def isOk(self): return False
 
 class HardwareMap(dict):
     implements(IHardwareMap)
 
-    def __init__(self, xml, route):
+    def __init__(self, yml, route):
         self.route = route
-        self.parse(xml)
+        self.parse(yml)
 
-    def parse(self, xml):
-        doc = xmltodict.parse(xml)
-        # the doc is rather inflexible
-        # top level is node
-        for node in doc['node']['node']:
-            # first check if the node has children, if it does, iterate over children
-            nodeAddress = int(node['@address'], 16)
-            if 'node' in node:
-                children = node['node']
-                # if there is only one node, it's not a list - fuck xml
-                if not isinstance(children, list): children = [children]
-                for child in children:
-                    childAddress = int(child['@address'], 16)
-                    absAddress = nodeAddress+childAddress
-                    if absAddress in self: raise KeyError(child['@id'])
-                    self[nodeAddress+childAddress] = HardwareNode(child, self)
-            else:
-                self[nodeAddress] = HardwareNode(node, self)
+    def parse(self, yml):
+        doc = yaml.load(yml)
+        for node in doc.get('nodes', []):
+            baseAddress = node.get('address')
+            # this will check if there are any children later
+            child = None
+            for child in node.get('nodes', []):
+                childAddress = child.get('address')
+                absAddress = baseAddress+childAddress
+                if absAddress in self: raise KeyError('{0:s}/{1:s}'.format(node['id'],child['id']))
+                self[absAddress] = HardwareNode(child, self)
+            # no children
+            if child is None:
+                self[baseAddress] = HardwareNode(node, self)
 
     def isOk(self):
         for k,v in self.iteritems():
@@ -100,9 +96,9 @@ class HardwareNode(dict):
     implements(IHardwareNode)
 
     def __init__(self, node, hw_map):
-        #self['description'] = getattr(node, '@description', '')
-        self['permissions'] = int(node.get('@permissions', 0))
-        self['allowed'] = node.get('@allowed', [])
+        #self['description'] = getattr(node, 'description', '')
+        self['permissions'] = int(node.get('permissions', 0))
+        self['allowed'] = node.get('allowed', [])
         self['disallowed'] = node.get('disallowed', ['-1'])
         self.hw_map = hw_map
 
