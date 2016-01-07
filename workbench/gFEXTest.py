@@ -1,6 +1,6 @@
 from ironman.hardware import HardwareManager, HardwareMap, HardwareNode
 manager = HardwareManager()
-manager.add(HardwareMap(file('xadc.xml').read(), 'xadc'))
+manager.add(HardwareMap(file('xadc.yml').read(), 'xadc'))
 
 from ironman.communicator import Jarvis, ComplexIO
 j = Jarvis()
@@ -54,10 +54,21 @@ def buildResponsePacket(packet):
     return data
 
 
+from ironman.history import History
+h = History()
+
 from ironman.server import ServerFactory
 from ironman.packet import IPBusPacket
 from twisted.internet import reactor
 from twisted.internet.defer import Deferred
 
-reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket)))
+reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(h.record)))
+
+'''set up a web server from top level'''
+# Site, an IProtocolFactory which glues a listening server port (IListeningPort) to the HTTPChannel implementation
+from twisted.web.server import Site
+# File, an IResource which glues the HTTP protocol implementation to the filesystem
+from twisted.web.static import File
+reactor.listenTCP(8000, Site(File("/")))
+
 reactor.run()
