@@ -51,7 +51,7 @@ from twisted.internet.defer import Deferred
 
 reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(h.record)))
 
-'''set up a web server from top level'''
+'''set up a web server from top level: http://imgur.com/jCQlfrm'''
 # Site, an IProtocolFactory which glues a listening server port (IListeningPort) to the HTTPChannel implementation
 from twisted.web.server import Site
 # File, an IResource which glues the HTTP protocol implementation to the filesystem
