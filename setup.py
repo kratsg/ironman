@@ -59,5 +59,6 @@ setup(name='ironman',
       ],
       extras_require={
         'testing': ['pytest'],
-      }
+      },
+      data_files=[('workbench', ['workbench/gFEXTest.py', 'workbench/xadc.yml'])],
 )
