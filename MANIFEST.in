@@ -1,2 +1,4 @@
 include README.md
 include LICENSE
+include workbench/gFEXTest.py
+include workbench/xadc.yml
