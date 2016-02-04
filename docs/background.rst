@@ -81,7 +81,41 @@ The Hardware Manager is our primary means of interfacing. We can demonstrate via
 ...        id: temperature
 ...        address: 0x00000000
 ...        nodes:
-...            - &offset {id: offset, address: 0x0, permissions: 1}"""
+...            - &offset {id: offset, address: 0x0, permissions: 1}
+...            - &raw {id: raw, address: 0x1, permissions: 1}
+...            - &scale {id: scale, address: 0x2, permissions: 1}
+...    -
+...        id: vccint
+...        address: 0x00000010
+...        nodes: [*raw, *scale]
+...    -
+...        id: vccaux
+...        address: 0x00000020
+...        nodes: [*raw, *scale]
+...    -
+...        id: vccbram
+...        address: 0x00000030
+...        nodes: [*raw, *scale]
+...    -
+...        id: vccpint
+...        address: 0x00000040
+...        nodes: [*raw, *scale]
+...    -
+...        id: vccpaux
+...        address: 0x00000050
+...        nodes: [*raw, *scale]
+...    -
+...        id: vccoddr
+...        address: 0x00000060
+...        nodes: [*raw, *scale]
+...    -
+...        id: vrefp
+...        address: 0x00000070
+...        nodes: [*raw, *scale]
+...    -
+...        id: vrefn
+...        address: 0x00000080
+...        nodes: [*raw, *scale]"""
 >>>
 >>> # initialize a manager to use for everyone that needs it
 >>> from ironman.hardware import HardwareManager, HardwareMap
@@ -105,15 +139,8 @@ In **ironman**, the client is known as Jarvis (the assistant, get it?). Jarvis i
 >>> jarvis = Jarvis()
 >>> # tell Jarvis about our hardware manager
 >>> jarvis.set_hardware_manager(manager)
->>>
->>> # register a controller with jarvis
->>> @jarvis.register('xadc')
-... class XADCController(ComplexIO):
-...     __base__ = "/sys/devices/soc0/amba@0/f8007100.ps7-xadc/iio:device0/"
-...     __f__ = {0: __base__+"in_temp0_offset"}
-...
 
-In this particular example, it is assumed you had added a hardware definitions for the *xADC* controller which is being registered to Jarvis. Each file path is associated with an address that you would explicitly map out. A future iteration of how hardware gets defined should alleviate the numerous redefinitions of addresses that occur.
+In particular, Jarvis is one of the easiest things to set up since it contains a lot of internal logic to route requests appropriately and execute controllers for you. In this way, Jarvis is a lot like a *router*.
 
 Internal Communications
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,5 +149,35 @@ Internal Communications
 
 Lastly, the Internal Communications is primarily custom code written by the developers to do exactly that: communicate with the board. Depending on how the board is set up, there may be a virtual filesystem or raw pointers or custom drivers that the code will need to access. Since this is something that will vary on a board-by-board basis, we leave most of this code up to the user and only provide a few simple cases for file reading and writing.
 
+Continuing on with our code examples as above, you might have your driver create a virtual file system for the temperature. So how would you create a custom communications controller that Jarvis knows about that handles the requests?
 
+>>> # register a controller with jarvis
+>>> @jarvis.register('xadc')
+... class XADCController(ComplexIO):
+...     __base__ = "/sys/devices/soc0/amba@0/f8007100.ps7-xadc/iio:device0/"
+...     __f__ = {
+...                 0:   __base__+"in_temp0_offset",
+...                 1:   __base__+"in_temp0_raw",
+...                 2:   __base__+"in_temp0_scale",
+...                 17:  __base__+"in_voltage0_vccint_raw",
+...                 18:  __base__+"in_voltage0_vccint_scale",
+...                 33:  __base__+"in_voltage1_vccaux_raw",
+...                 34:  __base__+"in_voltage1_vccaux_scale",
+...                 49:  __base__+"in_voltage2_vccbram_raw",
+...                 50:  __base__+"in_voltage2_vccbram_scale",
+...                 65:  __base__+"in_voltage3_vccpint_raw",
+...                 66:  __base__+"in_voltage3_vccpint_scale",
+...                 81:  __base__+"in_voltage4_vccpaux_raw",
+...                 82:  __base__+"in_voltage4_vccpaux_scale",
+...                 97:  __base__+"in_voltage5_vccoddr_raw",
+...                 98:  __base__+"in_voltage5_vccoddr_scale",
+...                 113: __base__+"in_voltage6_vrefp_raw",
+...                 114: __base__+"in_voltage6_vrefp_scale",
+...                 129: __base__+"in_voltage7_vrefn_raw",
+...                 130: __base__+"in_voltage7_vrefn_scale"
+...             }
+
+And you are done. This will read from :code:`/sys/devices/soc0/amba@0/f8007100.ps7-xadc/iio:device0/in_temp0_offset` if an IPBus read request is recieved for address :code:`0x0`. Similarly, it will read from ``in_voltage6_vrefp_raw`` if the address is ``0x71`` (which is ``113`` in decimal).
+
+In this particular example, it is assumed you had added a hardware definitions for the *xADC* controller which is being registered to Jarvis. Each file path is associated with an address that you would explicitly map out. A future iteration of how hardware gets defined should alleviate the numerous redefinitions of addresses that occur.
 
