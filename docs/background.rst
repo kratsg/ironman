@@ -48,21 +48,16 @@ For those who are more familiar or learn better with some code:
 >>> from twisted.internet import reactor
 >>> from twisted.internet.defer import Deferred
 >>>
+>>> # build up our callback chain
+>>> def callbacks():
+...    return Deferred().addCallback(IPBusPacket).addCallback(history.record)
+>>>
 >>> # listen for IPBus packets over UDP at port 8888
->>> reactor.listenUDP(8888, ServerFactory('udp',
-...     lambda: Deferred().addCallback(IPBusPacket)
-...                 .addCallback(history.record)
-...     )
-... )
-...
+>>> reactor.listenUDP(8888, ServerFactory('udp', callbacks))
 <ironman.server.UDP on 8888>
+>>>
 >>> # listen for IPBus packets over TCP at port 8889
->>> reactor.listenTCP(8889, ServerFactory('tcp', \
-...     lambda: Deferred().addCallback(IPBusPacket)
-...                 .addCallback(history.record)
-...     )
-... )
-...
+>>> reactor.listenTCP(8889, ServerFactory('tcp', callbacks))
 <<class 'twisted.internet.tcp.Port'> of ironman.server.TCPFactory on 8889>
 
 and of course, this is all building up our logic. To actually start up the server, we simply need::
@@ -70,6 +65,7 @@ and of course, this is all building up our logic. To actually start up the serve
     # start the global loop
     reactor.run()
 
+Notice how that independent of which transport is being used to communicate with the server, the same callback chain is being executed correctly.
 
 Client
 ~~~~~~
