@@ -35,6 +35,14 @@ ironman.hardware module
     :undoc-members:
     :show-inheritance:
 
+ironman.history module
+-----------------------
+
+.. automodule:: ironman.history
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 ironman.interfaces module
 -------------------------
 
