@@ -1,5 +1,5 @@
-API Reference
-=============
+ironman
+=======
 
 .. toctree::
    :maxdepth: 4

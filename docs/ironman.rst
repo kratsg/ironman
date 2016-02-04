@@ -36,7 +36,7 @@ ironman.hardware module
     :show-inheritance:
 
 ironman.history module
------------------------
+----------------------
 
 .. automodule:: ironman.history
     :members:
