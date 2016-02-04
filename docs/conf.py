@@ -303,6 +303,7 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
+'''
 # http://stackoverflow.com/questions/12772927/specifying-an-online-image-in-sphinx-restructuredtext-format
 import sphinx.environment
 from docutils.utils import get_source_line
@@ -312,4 +313,4 @@ def _warn_node(self, msg, node):
         self._warnfunc(msg, '%s:%s' % get_source_line(node))
 
 sphinx.environment.BuildEnvironment.warn_node = _warn_node
-
+'''
