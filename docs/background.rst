@@ -67,6 +67,20 @@ and of course, this is all building up our logic. To actually start up the serve
 
 Notice how that independent of which transport is being used to communicate with the server, the same callback chain is being executed correctly.
 
+Hardware Interface
+~~~~~~~~~~~~~~~~~~
+
+.. image:: images/ironman.diagram.hardware_interface.png
+
+The job of the Hardware Interface is to parse the hardware definitions transferred to the board and build up a cached, global mapping of address to properties about the address. In Python terminology, this is a giant dictionary. It must assess that a single address is not taken up by two different hardware definitions (no conflicts) and that the hardware map is parseable and valid (the latter has yet to be defined yet). It will also provide a way to compute the checksum of the hardware map files to ensure that the board is running on the same definitions that the monkey has communicated to the board with.
+
+The Hardware Manager is our primary means of interfacing. We can demonstrate via another code example::
+
+    # initialize a manager to use for everyone that needs it
+    manager = HardwareManager()
+    # add a map to the manager
+    manager.add(HardwareMap(file('xadc.xml').read(), 'xadc'))
+
 Client
 ~~~~~~
 
@@ -76,13 +90,26 @@ The job of the client here is to analyze the packet more thoroughly. If the clie
 
 It should be noted that the client is not allowed to modify the response packet at all. Only the Server and the Internal Communications are allowed to do this.
 
+In **ironman**, the client is known as Jarvis (the assistant, get it?). Jarvis is used like so:
 
-Hardware Interface
-~~~~~~~~~~~~~~~~~~
+>>> # before Jarvis is made, let's assume a hardware manager exists such as from above
+>>> from ironman.hardware import HardwareManager
+>>> m = HardwareManager()
+>>>
+>>> # now let's make jarvis
+>>> from ironman.communicator import Jarvis, ComplexIO
+>>> j = Jarvis()
+>>> # tell Jarvis about our hardware manager
+>>> j.set_hardware_manager(m)
+>>>
+>>> # register a controller with jarvis
+>>> @j.register('xadc')
+... class XADCController(ComplexIO):
+...     __base__ = "/sys/devices/soc0/amba@0/f8007100.ps7-xadc/iio:device0/"
+...     __f__ = {0: __base__+"in_temp0_offset"}
+...
 
-.. image:: images/ironman.diagram.hardware_interface.png
-
-The job of the Hardware Interface is to parse the hardware definitions transferred to the board and build up a cached, global mapping of address to properties about the address. In Python terminology, this is a giant dictionary. It must assess that a single address is not taken up by two different hardware definitions (no conflicts) and that the hardware map is parseable and valid (the latter has yet to be defined yet). It will also provide a way to compute the checksum of the hardware map files to ensure that the board is running on the same definitions that the monkey has communicated to the board with.
+In this particular example, it is assumed you had added a hardware definitions for the *xADC* controller which is being registered to Jarvis. Each file path is associated with an address that you would explicitly map out. A future iteration of how hardware gets defined should alleviate the numerous redefinitions of addresses that occur.
 
 Internal Communications
 ~~~~~~~~~~~~~~~~~~~~~~~
