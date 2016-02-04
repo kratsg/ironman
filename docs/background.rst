@@ -74,12 +74,20 @@ Hardware Interface
 
 The job of the Hardware Interface is to parse the hardware definitions transferred to the board and build up a cached, global mapping of address to properties about the address. In Python terminology, this is a giant dictionary. It must assess that a single address is not taken up by two different hardware definitions (no conflicts) and that the hardware map is parseable and valid (the latter has yet to be defined yet). It will also provide a way to compute the checksum of the hardware map files to ensure that the board is running on the same definitions that the monkey has communicated to the board with.
 
-The Hardware Manager is our primary means of interfacing. We can demonstrate via another code example::
+The Hardware Manager is our primary means of interfacing. We can demonstrate via another code example:
 
-    # initialize a manager to use for everyone that needs it
-    manager = HardwareManager()
-    # add a map to the manager
-    manager.add(HardwareMap(file('xadc.xml').read(), 'xadc'))
+>>> xadcyml = """ nodes:
+...    -
+...        id: temperature
+...        address: 0x00000000
+...        nodes:
+...            - &offset {id: offset, address: 0x0, permissions: 1}"""
+>>>
+>>> # initialize a manager to use for everyone that needs it
+>>> from ironman.hardware import HardwareManager, HardwareMap
+>>> manager = HardwareManager()
+>>> # add a map to the manager
+>>> manager.add(HardwareMap(xadcyml, 'xadc'))
 
 Client
 ~~~~~~
@@ -92,18 +100,14 @@ It should be noted that the client is not allowed to modify the response packet 
 
 In **ironman**, the client is known as Jarvis (the assistant, get it?). Jarvis is used like so:
 
->>> # before Jarvis is made, let's assume a hardware manager exists such as from above
->>> from ironman.hardware import HardwareManager
->>> m = HardwareManager()
->>>
 >>> # now let's make jarvis
 >>> from ironman.communicator import Jarvis, ComplexIO
->>> j = Jarvis()
+>>> jarvis = Jarvis()
 >>> # tell Jarvis about our hardware manager
->>> j.set_hardware_manager(m)
+>>> jarvis.set_hardware_manager(manager)
 >>>
 >>> # register a controller with jarvis
->>> @j.register('xadc')
+>>> @jarvis.register('xadc')
 ... class XADCController(ComplexIO):
 ...     __base__ = "/sys/devices/soc0/amba@0/f8007100.ps7-xadc/iio:device0/"
 ...     __f__ = {0: __base__+"in_temp0_offset"}
