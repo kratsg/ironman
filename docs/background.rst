@@ -38,20 +38,27 @@ This leads to the other part of the server which is to maintain a log of all inb
 
 For those who are more familiar or learn better with some code::
 
+    # grab pieces of ironman
     from ironman.server import ServerFactory
     from ironman.packet import IPBusPacket
+    from ironman.history import History
+    history = History()
+
+    # we need deferreds and reactor from twisted
     from twisted.internet import reactor
     from twisted.internet.defer import Deferred
 
     # listen for IPBus packets over UDP at port 8888
     reactor.listenUDP(8888, ServerFactory('UDP',
         lambda: Deferred().addCallback(IPBusPacket)
+                    .addCallback(history.record)
         )
     )
 
     # listen for IPBus packets over TCP at port 8889
     reactor.listenTCP(8889, ServerFactory('TCP',
         lambda: Deferred().addCallback(IPBusPacket)
+                    .addCallback(history.record)
         )
     )
 
