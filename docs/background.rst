@@ -36,31 +36,36 @@ If the basic sanity checks look good, then it must decide what to do with the pa
 
 This leads to the other part of the server which is to maintain a log of all inbound/request and outbound/response packets. It is at this point which the board communicates with the outside world and makes it a suitable place to implement the history recording.
 
-For those who are more familiar or learn better with some code::
+For those who are more familiar or learn better with some code:
 
-    # grab pieces of ironman
-    from ironman.server import ServerFactory
-    from ironman.packet import IPBusPacket
-    from ironman.history import History
-    history = History()
+>>> # grab pieces of ironman
+>>> from ironman.server import ServerFactory
+>>> from ironman.packet import IPBusPacket
+>>> from ironman.history import History
+>>> history = History()
+>>>
+>>> # we need deferreds and reactor from twisted
+>>> from twisted.internet import reactor
+>>> from twisted.internet.defer import Deferred
+>>>
+>>> # listen for IPBus packets over UDP at port 8888
+>>> reactor.listenUDP(8888, ServerFactory('udp',
+...     lambda: Deferred().addCallback(IPBusPacket)
+...                 .addCallback(history.record)
+...     )
+... )
+...
+<ironman.server.UDP on 8888>
+>>> # listen for IPBus packets over TCP at port 8889
+>>> reactor.listenTCP(8889, ServerFactory('tcp', \
+...     lambda: Deferred().addCallback(IPBusPacket)
+...                 .addCallback(history.record)
+...     )
+... )
+...
+<<class 'twisted.internet.tcp.Port'> of ironman.server.TCPFactory on 8889>
 
-    # we need deferreds and reactor from twisted
-    from twisted.internet import reactor
-    from twisted.internet.defer import Deferred
-
-    # listen for IPBus packets over UDP at port 8888
-    reactor.listenUDP(8888, ServerFactory('UDP',
-        lambda: Deferred().addCallback(IPBusPacket)
-                    .addCallback(history.record)
-        )
-    )
-
-    # listen for IPBus packets over TCP at port 8889
-    reactor.listenTCP(8889, ServerFactory('TCP',
-        lambda: Deferred().addCallback(IPBusPacket)
-                    .addCallback(history.record)
-        )
-    )
+and of course, this is all building up our logic. To actually start up the server, we simply need::
 
     # start the global loop
     reactor.run()
