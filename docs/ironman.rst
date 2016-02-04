@@ -12,7 +12,7 @@ Submodules
 ----------
 
 ironman.communicator module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.communicator
     :members:
@@ -20,7 +20,7 @@ ironman.communicator module
     :show-inheritance:
 
 ironman.globals module
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.globals
     :members:
@@ -28,7 +28,7 @@ ironman.globals module
     :show-inheritance:
 
 ironman.hardware module
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.hardware
     :members:
@@ -36,7 +36,7 @@ ironman.hardware module
     :show-inheritance:
 
 ironman.history module
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.history
     :members:
@@ -44,7 +44,7 @@ ironman.history module
     :show-inheritance:
 
 ironman.interfaces module
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.interfaces
     :members:
@@ -52,7 +52,7 @@ ironman.interfaces module
     :show-inheritance:
 
 ironman.packet module
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.packet
     :members:
@@ -60,7 +60,7 @@ ironman.packet module
     :show-inheritance:
 
 ironman.server module
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.server
     :members:
@@ -68,18 +68,9 @@ ironman.server module
     :show-inheritance:
 
 ironman.utilities module
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: ironman.utilities
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: ironman
     :members:
     :undoc-members:
     :show-inheritance:
