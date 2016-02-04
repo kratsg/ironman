@@ -6,3 +6,4 @@ ironman.egg-info
 _build
 .coverage
 dist
+.DS_Store
