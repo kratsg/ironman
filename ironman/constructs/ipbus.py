@@ -19,7 +19,7 @@ Struct detailing the Packet Header logic
 """
 
 ControlHeaderStruct = BitStruct("transaction",
-                        BitField("protocol_version", 4),
+                        OneOf(BitField("protocol_version", 4), [IPBUS_VERSION]),
                         BitField("id", 12),
                         BitField("words", 8),
                         Enum(BitField("type_id", 4),
