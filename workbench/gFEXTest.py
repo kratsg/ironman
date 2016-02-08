@@ -31,6 +31,23 @@ class XADCController(ComplexIO):
                 130: __base__+"in_voltage7_vrefn_scale"
             }
 
+fakereaderyaml = '''
+nodes:
+    -
+        id: random
+        address: 0x00000003
+'''
+manager.add(HardwareMap(fakereaderyaml, 'fake'))
+
+import random
+import struct
+@j.register('fake')
+class FakeReader:
+    def read(self, offset, size):
+        return struct.pack('{0:s}f'.format(''.join(['x']*4*(size-1))), random.random())
+
+    def write(self, offset, data): pass
+
 from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
 def buildResponsePacket(packet):
     data = ''
