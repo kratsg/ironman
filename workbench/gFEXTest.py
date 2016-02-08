@@ -49,7 +49,10 @@ from ironman.packet import IPBusPacket
 from twisted.internet import reactor
 from twisted.internet.defer import Deferred
 
-reactor.listenUDP(8888, ServerFactory('udp', lambda: Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(h.record)))
+def deferredGenerator():
+    return Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(h.record)
+
+reactor.listenUDP(8888, ServerFactory('udp', deferredGenerator))
 
 '''set up a web server from top level: http://imgur.com/jCQlfrm'''
 # Site, an IProtocolFactory which glues a listening server port (IListeningPort) to the HTTPChannel implementation
@@ -57,5 +60,56 @@ from twisted.web.server import Site
 # File, an IResource which glues the HTTP protocol implementation to the filesystem
 from twisted.web.static import File
 reactor.listenTCP(8000, Site(File("/")))
+
+'''set up a mirror web server for IPBus requests'''
+from twisted.web.resource import Resource
+# deferred responses
+from twisted.web.server import NOT_DONE_YET
+# return json
+import json
+class HTTPIPBusRoot(Resource):
+    # has children
+    isLeaf = False
+
+class HTTPIPBus(Resource):
+    # no children
+    isLeaf = True
+    def render_GET(self, request):
+        request.responseHeaders.addRawHeader(b"content-type", b"application/json")
+        # request.postpath will contain what we need
+        if len(request.postpath) != 3:
+            return json.dumps({
+                "success": False,
+                "data": None,
+                "error": "Incorrect number of URL segments",
+                "traceback": None
+            })
+
+        def write(result):
+            request.write(json.dumps({
+                "success": True,
+                "data": result,
+                "error": None,
+                "traceback": None
+            }))
+            request.finish()
+
+        def error(result):
+            request.write(json.dumps({
+                "success": False,
+                "data": None,
+                "error": "An unknown error has occurred with the application. Message: {0}".format(result.getErrorMessage()),
+                "traceback": result.getBriefTraceback()
+            }))
+            request.finish()
+
+        d = deferredGenerator()
+        d.addCallbacks(write, error)
+        d.callback('test')
+        return NOT_DONE_YET
+
+http_ipbus_root = HTTPIPBusRoot()
+http_ipbus_root.putChild('read', HTTPIPBus())
+reactor.listenTCP(7777, Site(http_ipbus_root))
 
 reactor.run()
