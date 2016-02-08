@@ -85,6 +85,26 @@ class HTTPIPBus(Resource):
                 "traceback": None
             })
 
+        # make sure we can convert to hex string
+        for i, word in enumerate(request.postpath):
+            if len(word) != 8:
+                return json.dumps({
+                    "success": False,
+                    "data": None,
+                    "error": "Word {:d} has incorrect length {:d}. It should be: 8.".format(i, len(word)),
+                    "traceback": None})
+
+        packet = ''.join(request.postpath)
+        try:
+            packet.decode("hex")
+        except TypeError as e:
+            return json.dumps({
+                "success": False,
+                "data": None,
+                "error": str(e),
+                "traceback": sys.exc_info()
+            })
+
         def write(result):
             request.write(json.dumps({
                 "success": True,
@@ -105,7 +125,8 @@ class HTTPIPBus(Resource):
 
         d = deferredGenerator()
         d.addCallbacks(write, error)
-        d.callback('test')
+        print("Making IPBus packet {0:s}".format(packet))
+        d.callback(packet.decode('hex'))
         return NOT_DONE_YET
 
 http_ipbus_root = HTTPIPBusRoot()
