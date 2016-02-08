@@ -48,11 +48,12 @@ class FakeReader:
 
     def write(self, offset, data): pass
 
-from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct
+from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct, IPBusConstruct
 def buildResponsePacket(packet):
+    import pdb; pdb.set_trace()
     data = ''
-    data += PacketHeaderStruct.build(packet.struct.header)
-    for transaction, response in zip(packet.struct.data, packet.response):
+    data += PacketHeaderStruct.build(packet.response.header)
+    for transaction, response in zip(packet.response.data, packet.response):
         data += ControlHeaderStruct.build(transaction)
         data += response.encode("hex").decode("hex")
     return data
@@ -67,7 +68,7 @@ from twisted.internet import reactor
 from twisted.internet.defer import Deferred
 
 def deferredGenerator():
-    return Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(h.record)
+    return Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket)#.addCallback(h.record)
 
 reactor.listenUDP(8888, ServerFactory('udp', deferredGenerator))
 
@@ -115,17 +116,18 @@ class HTTPIPBus(Resource):
         try:
             packet.decode("hex")
         except TypeError as e:
+            import sys
             return json.dumps({
                 "success": False,
                 "data": None,
                 "error": str(e),
-                "traceback": sys.exc_info()
+                "traceback": str(sys.exc_info())
             })
 
         def write(result):
             request.write(json.dumps({
                 "success": True,
-                "data": result,
+                "data": IPBusConstruct.parse(result).data[0].data,
                 "error": None,
                 "traceback": None
             }))
