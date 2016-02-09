@@ -6,6 +6,7 @@
 
 from zope.interface import implements
 from ironman.interfaces import ICommunicationSlave, ICommunicationDriver
+from ironman.constructs.ipbus import IPBusWords
 
 class Jarvis(object):
     """ This is the general communication slave.
@@ -53,7 +54,7 @@ class Jarvis(object):
         """
         if packet.request.header.type_id == 'CONTROL':
             for transaction, response in zip(packet.request.data, packet.response.data):
-                response.data = [self.__transaction__(transaction)]
+                response.data = IPBusWords.parse(self.__transaction__(transaction)).data
         return packet
 
     def __transaction__(self, transaction):
