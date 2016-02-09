@@ -44,18 +44,22 @@ import struct
 @j.register('fake')
 class FakeReader:
     def read(self, offset, size):
-        return struct.pack('{0:s}f'.format(''.join(['x']*4*(size-1))), random.random())
+        number = random.random()
+        print(number)
+        return int(str(number)[:size*4].encode('hex'), 16)
 
     def write(self, offset, data): pass
 
 from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct, IPBusConstruct
 def buildResponsePacket(packet):
+    packet.response.data[0].info_code = 'SUCCESS'
     import pdb; pdb.set_trace()
-    data = ''
-    data += PacketHeaderStruct.build(packet.response.header)
-    for transaction, response in zip(packet.response.data, packet.response):
-        data += ControlHeaderStruct.build(transaction)
-        data += response.encode("hex").decode("hex")
+    packet.response.data[0].data = [int(packet.response.data[0].data.encode('hex'), 16)]
+    return IPBusConstruct.build(packet.response)
+    # data += PacketHeaderStruct.build(packet.response.header)
+    # for transaction, response in zip(packet.response.data, packet.response):
+    #     data += ControlHeaderStruct.build(transaction)
+    #     data += response.encode("hex").decode("hex")
     return data
 
 
@@ -144,7 +148,7 @@ class HTTPIPBus(Resource):
 
         d = deferredGenerator()
         d.addCallbacks(write, error)
-        print("Making IPBus packet {0:s}".format(packet))
+        print("Handling IPBus packet {0:s}".format(packet))
         d.callback(packet.decode('hex'))
         return NOT_DONE_YET
 
