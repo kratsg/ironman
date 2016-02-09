@@ -53,7 +53,7 @@ class Jarvis(object):
         """
         if packet.request.header.type_id == 'CONTROL':
             for transaction, response in zip(packet.request.data, packet.response.data):
-                response.data = self.__transaction__(transaction)
+                response.data = [self.__transaction__(transaction)]
         return packet
 
     def __transaction__(self, transaction):
