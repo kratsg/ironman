@@ -133,6 +133,8 @@ ResendStruct = Struct("ResendTransaction")
 Struct detailing the Resend Action logic
 """
 
+IPBusWords = Struct('IPBusWords', GreedyRange(UBInt32('data')))
+
 IPBusConstruct = Struct("IPBusPacket",
                     PacketHeaderStruct,  # defined as 'header' in context
                     Switch("data", lambda ctx: ctx.header.type_id,
