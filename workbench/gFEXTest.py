@@ -40,21 +40,18 @@ nodes:
 manager.add(HardwareMap(fakereaderyaml, 'fake'))
 
 import random
-import struct
 @j.register('fake')
 class FakeReader:
     def read(self, offset, size):
         number = random.random()
-        print(number)
-        return int(str(number)[:size*4].encode('hex'), 16)
+        return str(number)[:size*4]
 
     def write(self, offset, data): pass
 
-from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct, IPBusConstruct
+from ironman.constructs.ipbus import PacketHeaderStruct, ControlHeaderStruct, IPBusConstruct, IPBusWords
 def buildResponsePacket(packet):
     packet.response.data[0].info_code = 'SUCCESS'
-    import pdb; pdb.set_trace()
-    packet.response.data[0].data = [int(packet.response.data[0].data.encode('hex'), 16)]
+    #packet.response.data[0].data = [packet.response.data[0].data]
     return IPBusConstruct.build(packet.response)
     # data += PacketHeaderStruct.build(packet.response.header)
     # for transaction, response in zip(packet.response.data, packet.response):
@@ -131,7 +128,7 @@ class HTTPIPBus(Resource):
         def write(result):
             request.write(json.dumps({
                 "success": True,
-                "data": IPBusConstruct.parse(result).data[0].data,
+                "data": IPBusWords.build(IPBusConstruct.parse(result).data[0]),
                 "error": None,
                 "traceback": None
             }))
