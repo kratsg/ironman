@@ -5,8 +5,9 @@ notifications:
     email: false
 install:
     - "pip install -r requirements.txt"
-    - "pip install coveralls"
+    - "pip install tox codecov"
 script:
-    - coverage run --source=ironman setup.py test
+    - tox
+    #- coverage run `which tox`
 after_success:
-    coveralls
+    - codecov
