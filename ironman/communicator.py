@@ -54,7 +54,7 @@ class Jarvis(object):
         """
         if packet.request.header.type_id == 'CONTROL':
             for transaction, response in zip(packet.request.data, packet.response.data):
-                response.data = IPBusWords.parse(self.__transaction__(transaction)).data
+                response.data = transaction_response = self.__transaction__(transaction)
         return packet
 
     def __transaction__(self, transaction):
@@ -63,9 +63,10 @@ class Jarvis(object):
             raise KeyError(transaction.address)
         protocol = protocol()
         if transaction.type_id == 'READ':
-            return protocol.read(transaction.address, transaction.words)
+            return IPBusWords.parse(protocol.read(transaction.address, transaction.words)).data
         elif transaction.type_id == 'WRITE':
-            return protocol.write(transaction.address, transaction.data)
+            protocol.write(transaction.address, transaction.data)
+            return
 
     def register(self, route):
         if route is None:
