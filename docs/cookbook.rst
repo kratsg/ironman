@@ -99,3 +99,81 @@ AssertionError: assert [825373492] is None
 >>>
 
 and our work is done! Notice that it's not just a matter of setting the data field and building the packet.. we must also set the ``info_code`` field to a ``SUCCESS`` to signify that we're sending a *successful* response back.
+
+Random Number Generator
+-----------------------
+
+One might like to be able to generate a full test of the ``ironman`` suite by setting up fake routes for reading/writing as a proof-of-concept. I demonstrate such a concept using a lot of different pieces of code here:
+
+>>> from ironman.constructs.ipbus import IPBusConstruct, IPBusWords
+>>> from ironman.hardware import HardwareManager, HardwareMap
+>>> from ironman.communicator import Jarvis
+>>> from ironman.packet import IPBusPacket
+>>> from twisted.internet.defer import Deferred
+>>> import random
+>>>
+>>> hardware_map = '''
+... nodes:
+...   -
+...     id: random_number_generator
+...     address: 0x00000000
+...     nodes:
+...       - {id: generate, address: 0x0, permissions: 1}
+...       - {id: low_val, address: 0x1, permissions: 2}
+...       - {id: high_val, address: 0x2, permissions: 2}
+... '''
+...
+>>> j = Jarvis()
+>>> manager = HardwareManager()
+>>>
+>>> manager.add(HardwareMap(hardware_map, 'main'))
+>>> j.set_hardware_manager(manager)
+>>>
+>>> @j.register('main')
+... class RandomNumberGeneratorController:
+...   __low__  = 0
+...   __high__ = 9
+...   def read(self, offset, size):
+...     if offset == 0x0: return str(random.randint(self.__class__.__low__, self.__class__.__high__))[:size*4].rjust(4, "\0")
+...     elif offset == 0x1: return str(self.__class__.__low__)[:size*4].rjust(4, "\0")
+...     elif offset == 0x2: return str(self.__class__.__high__)[:size*4].rjust(4, "\0")
+...
+...   def write(self, offset, data):
+...     if offset == 0x0: pass
+...     elif offset == 0x1: self.__class__.__low__ = int(data[0])
+...     elif offset == 0x2: self.__class__.__high__ = int(data[0])
+...     return
+...
+>>> def buildResponsePacket(packet):
+...     packet.response.data[0].info_code = 'SUCCESS'
+...     return IPBusConstruct.build(packet.response)
+...
+>>> def printPacket(raw):
+...     print "raw: {0:s}".format(repr(raw.encode('hex')))
+...     print IPBusConstruct.parse(raw)
+...     print "data: {0:d}".format(int(IPBusWords.build(IPBusConstruct.parse('200000f0200001000000000200000039'.decode('hex')).data[0]).strip('\0')))
+...
+>>> d = Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(printPacket)
+>>> d.callback('200000f02000010f00000002'.decode('hex'))  # read the upper limit
+raw: '200000f0200001000000000200000039'
+Container:
+    header = Container:
+	protocol_version = 2
+	reserved = 0
+	id = 0
+	byteorder = 15
+	type_id = 'CONTROL'
+    data = [
+	Container:
+	    protocol_version = 2
+	    id = 0
+	    words = 1
+	    type_id = 'READ'
+	    info_code = 'SUCCESS'
+	    address = 2
+	    data = [
+		57
+	    ]
+    ]
+data: 9
+>>>
