@@ -3,7 +3,7 @@ Ironman
 
 |PyPI version| |Docs|
 
-|Build Status| |Coverage Status| |Code Health|
+|Build Status| |codecov| |Code Health|
 
 What is Ironman?
 ----------------
@@ -105,6 +105,12 @@ to speed on how it works and some details of sockets.
 I'm following the guide based on ``sandman``
 `here <https://www.jeffknupp.com/blog/2013/08/16/open-sourcing-a-python-project-the-right-way/>`__
 
+To Do
+-----
+
+-  split udp and tcp into different, separate protocols:
+   http://stackoverflow.com/questions/33224142/twisted-protocol-that-simultaneously-handles-tcp-and-udp-at-once
+
 Ideas
 -----
 
@@ -119,7 +125,7 @@ Ideas
    :target: http://iron-man.readthedocs.org/en/latest/intro.html
 .. |Build Status| image:: https://travis-ci.org/kratsg/ironman.svg?branch=master
    :target: https://travis-ci.org/kratsg/ironman
-.. |Coverage Status| image:: https://coveralls.io/repos/kratsg/ironman/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/github/kratsg/ironman?branch=master
+.. |codecov| image:: https://codecov.io/gh/kratsg/ironman/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/kratsg/ironman
 .. |Code Health| image:: https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat
    :target: https://landscape.io/github/kratsg/ironman/master
