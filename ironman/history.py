@@ -21,3 +21,4 @@ class History(dict):
         # Add new packet to history
         self.packets.append(packet)
         self[packet.request.header.id] = (IPBusConstruct.build(packet.request), IPBusConstruct.build(packet.response))
+        return packet
