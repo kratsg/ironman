@@ -20,5 +20,5 @@ class History(dict):
             del self[self.packets[0].request.header.id]
         # Add new packet to history
         self.packets.append(packet)
-        self[packet.request.header.id] = (IPBusConstruct.build(packet.request), IPBusConstruct.build(packet.response))
+        self[packet.request.header.id] = (IPBusConstruct.build(packet.request).encode('hex'), IPBusConstruct.build(packet.response).encode('hex'))
         return packet
