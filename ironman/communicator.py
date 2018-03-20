@@ -65,7 +65,7 @@ class Jarvis(object):
         if transaction.type_id == 'READ':
             return IPBusWords.parse(protocol.read(transaction.address, transaction.words)).data
         elif transaction.type_id == 'WRITE':
-            protocol.write(transaction.address, transaction.data)
+            protocol.write(transaction.address, bytes(bytearray(transaction.data)))
             return
 
     def register(self, route):
