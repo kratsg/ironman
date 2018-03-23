@@ -59,8 +59,7 @@ ControlStruct = "ControlTransaction" / Struct(
                       ("RMWBITS", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul),
                       ("RMWSUM", "REQUEST"): IfThenElse(this._.bigendian, Int32sb, Int32sl),  # note: signed 32-bit for subtraction!
                       ("RMWSUM", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul)
-										}, default=Check(lambda ctx: getattr(ctx, 'data', None) == None)),
-                    Terminated
+										}, default=Check(lambda ctx: getattr(ctx, 'data', None) == None))
 )
 
 """
