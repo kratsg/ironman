@@ -53,7 +53,7 @@ class Jarvis(object):
             Handle CONTROL packets
         """
         if packet.request.header.type_id == 'CONTROL':
-            for transaction, response in zip(packet.request.data, packet.response.data):
+            for transaction, response in zip(packet.request.transactions, packet.response.transactions):
                 response.data = transaction_response = self.__transaction__(transaction)
         return packet
 
@@ -62,9 +62,9 @@ class Jarvis(object):
         if protocol is None:
             raise KeyError(transaction.address)
         protocol = protocol()
-        if transaction.type_id == 'READ':
-            return IPBusWords.parse(protocol.read(transaction.address, transaction.words)).data
-        elif transaction.type_id == 'WRITE':
+        if transaction.header.type_id == 'READ':
+            return IPBusWords.parse(protocol.read(transaction.address, transaction.header.words)).data
+        elif transaction.header.type_id == 'WRITE':
             protocol.write(transaction.address, bytes(bytearray(transaction.data)))
             return
 

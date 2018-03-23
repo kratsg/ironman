@@ -33,22 +33,27 @@ Parsing an IPBus Packet
 >>> p = IPBusConstruct.parse(data)
 >>> print p
 Container:
+    pointer = 240
+    bigendian = True
     header = Container:
         protocol_version = 2
         reserved = 0
         id = 0
         byteorder = 15
-        type_id = 'CONTROL'
-    data = [
+        type_id = (enum) CONTROL 0
+    transactions = ListContainer:
         Container:
-            protocol_version = 2
-            id = 0
-            words = 1
-            type_id = 'READ'
-            info_code = 'REQUEST'
+            header = Container:
+                protocol_version = 2
+                id = 0
+                words = 1
+                type_id = (enum) READ 0
+                info_code = (enum) REQUEST 15
             address = 3
             data = None
-    ]
+    status = None
+    resend = None
+
 >>>
 
 Building an IPBus Packet
@@ -74,7 +79,8 @@ Note that when building an IPBus Packet, an error would be raised if we cannot b
 >>> new_data = IPBusConstruct.build(p)
 Traceback (most recent call last):
     ...
-ValidationError: ('invalid object', 0)
+ValidationError: object failed validation: 0
+
 
 which is letting us know (not a very verbose error) that the :code:`0x0` value is wrong.
 
@@ -87,12 +93,12 @@ As seen from the above examples, we have a read packet. Let's pretend the respon
 >>> in_data = '\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03'
 >>> in_p = IPBusConstruct.parse(in_data)
 >>> out_p = in_p
->>> out_p.data[0].data = [int("1234".encode("hex"), 16)]
+>>> out_p.transactions[0].data = [int("1234".encode("hex"), 16)]
 >>> out_data = IPBusConstruct.build(out_p)
 Traceback (most recent call last):
     ...
-AssertionError: assert [825373492] is None
->>> out_p.data[0].info_code = 'SUCCESS'
+CheckError: check failed during building
+>>> out_p.transactions[0].header.info_code = 'SUCCESS'
 >>> out_data = IPBusConstruct.build(out_p)
 >>> print repr(out_data)
 ' \x00\x00\xf0 \x00\x01\x00\x00\x00\x00\x031234'
@@ -145,7 +151,7 @@ One might like to be able to generate a full test of the ``ironman`` suite by se
 ...     return
 ...
 >>> def buildResponsePacket(packet):
-...     packet.response.data[0].info_code = 'SUCCESS'
+...     packet.response.transactions[0].header.info_code = 'SUCCESS'
 ...     return IPBusConstruct.build(packet.response)
 ...
 >>> def printPacket(raw):
@@ -157,23 +163,25 @@ One might like to be able to generate a full test of the ``ironman`` suite by se
 >>> d.callback('200000f02000010f00000002'.decode('hex'))  # read the upper limit
 raw: '200000f0200001000000000200000039'
 Container:
+    pointer = 240
+    bigendian = True
     header = Container:
-	protocol_version = 2
-	reserved = 0
-	id = 0
-	byteorder = 15
-	type_id = 'CONTROL'
-    data = [
-	Container:
-	    protocol_version = 2
-	    id = 0
-	    words = 1
-	    type_id = 'READ'
-	    info_code = 'SUCCESS'
-	    address = 2
-	    data = [
-		57
-	    ]
-    ]
-data: 9
+        protocol_version = 2
+        reserved = 0
+        id = 0
+        byteorder = 15
+        type_id = (enum) CONTROL 0
+    transactions = ListContainer:
+        Container:
+            header = Container:
+                protocol_version = 2
+                id = 0
+                words = 1
+                type_id = (enum) READ 0
+                info_code = (enum) SUCCESS 0
+            address = 2
+            data = ListContainer:
+                57
+    status = None
+    resend = None
 >>>
