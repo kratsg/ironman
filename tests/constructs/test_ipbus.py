@@ -30,3 +30,16 @@ class TestIPBusControlPacket:
         """
         with pytest.raises(FieldError) as e:
             ControlHeaderStruct.parse(data)
+
+"""
+foo = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03')
+print foo
+#print IPBusConstruct.build(foo).encode('hex')
+
+#bar = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x1f\xac\x00\x10\xf4\x00\x00\x00\x01')
+#print bar
+#print IPBusConstruct.build(bar).encode('hex')
+
+baz = IPBusConstruct.parse(b'\xf0\x00\x00\x20\x0f\x01\x00\x20\x03\x00\x00\x00')
+print baz
+"""
