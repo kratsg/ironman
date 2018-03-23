@@ -1,4 +1,4 @@
-from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer
+from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated
 from ironman.globals import IPBUS_VERSION
 
 PacketHeaderStruct = BitStruct(
@@ -59,7 +59,8 @@ ControlStruct = "ControlTransaction" / Struct(
                       ("RMWBITS", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul),
                       ("RMWSUM", "REQUEST"): IfThenElse(this._.bigendian, Int32sb, Int32sl),  # note: signed 32-bit for subtraction!
                       ("RMWSUM", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul)
-										})
+										}, default=Check(lambda ctx: getattr(ctx, 'data', None) == None)),
+                    Terminated
 )
 
 """
@@ -93,6 +94,7 @@ IPBusConstruct = "IPBusPacket" / Struct(
                     "transactions" / If(lambda ctx: ctx.header.type_id == "CONTROL", GreedyRange(ControlStruct)),
                     "status" / If(lambda ctx: ctx.header.type_id == "STATUS", StatusRequestStruct),
                     "resend" / If(lambda ctx: ctx.header.type_id == "RESEND", ResendStruct),
+                    Terminated
 )
 """
 Top-level IPBus Construct which is a packet parser/builder
