@@ -1,7 +1,7 @@
 attrs==17.2.0
 Automat==0.6.0
 constantly==15.1.0
-construct==2.5.2
+construct==2.9.39
 hyperlink==17.3.0
 incremental==17.5.0
 ironman==0.2.14
