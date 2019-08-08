@@ -33,8 +33,7 @@ Parsing an IPBus Packet
 >>> p = IPBusConstruct.parse(data)
 >>> print p
 Container:
-    pointer = 240
-    bigendian = True
+    endian = (enum) BIG 240
     header = Container:
         protocol_version = 2
         reserved = 0
@@ -163,8 +162,7 @@ One might like to be able to generate a full test of the ``ironman`` suite by se
 >>> d.callback('200000f02000010f00000002'.decode('hex'))  # read the upper limit
 raw: '200000f02000010000000039'
 Container:
-    pointer = 240
-    bigendian = True
+    endian = (enum) BIG 240
     header = Container:
         protocol_version = 2
         reserved = 0

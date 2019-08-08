@@ -34,13 +34,13 @@ def test_data_endianness_switch():
     in_data = '200000f020000100deadbeef'.decode('hex')
     packet = IPBusConstruct.parse(in_data)
 
-    assert packet.bigendian
+    assert packet.endian == 'BIG'
 
-    packet.pointer=0x0 # make it little-endian
+    packet.endian='LITTLE' # make it little-endian
     out_data = IPBusConstruct.build(packet)
     assert out_data.encode('hex') == 'f000002000010020efbeadde'
 
-    assert IPBusConstruct.parse(out_data).bigendian == False
+    assert IPBusConstruct.parse(out_data).endian == 'LITTLE'
 
 """
 foo = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03')

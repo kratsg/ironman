@@ -1,8 +1,8 @@
 from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated
 from ironman.globals import IPBUS_VERSION
 
-_IPBusWordFactory = lambda this: IfThenElse(this._.bigendian, Int32ub, Int32ul)
-_IPBusSignedWordFactory = lambda this: IfThenElse(this._.bigendian, Int32sb, Int32sl)
+_IPBusWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32ub, Int32ul)
+_IPBusSignedWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32sb, Int32sl)
 IPBusWords = GreedyRange(Int32ub)
 
 PacketHeaderStruct = BitStruct(
@@ -50,7 +50,7 @@ Struct detailing the Control Header logic
 """
 
 ControlStruct = "ControlTransaction" / Struct(
-                    "header" / IfThenElse(this._.bigendian, ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
+                    "header" / IfThenElse(this._.endian=='BIG', ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
                     "address" / If(this.header.info_code == "REQUEST", _IPBusWordFactory(this)),
 										"data" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
 											("READ","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
@@ -87,10 +87,14 @@ ResendStruct = "ResendTransaction" / Struct()
 Struct detailing the Resend Action logic
 """
 
+Enum(Nibble,
+                          CONTROL = 0x0,
+                          STATUS = 0x1,
+                          RESEND = 0x2)
+
 IPBusConstruct = "IPBusPacket" / Struct(
-                    "pointer" / Pointer(3, Int8ub),
-                    "bigendian" / Computed(this.pointer == 0xf0),
-                    "header" / IfThenElse(this.bigendian, PacketHeaderStruct, ByteSwapped(PacketHeaderStruct)),  # defined as 'header' in context
+                    "endian" / Enum(Pointer(3, Int8ub), BIG=0xf0, LITTLE=0x20),
+                    "header" / IfThenElse(this.endian=='BIG', PacketHeaderStruct, ByteSwapped(PacketHeaderStruct)),  # defined as 'header' in context
 
                     "transactions" / If(lambda ctx: ctx.header.type_id == "CONTROL", GreedyRange(ControlStruct)),
                     "status" / If(lambda ctx: ctx.header.type_id == "STATUS", StatusRequestStruct),
