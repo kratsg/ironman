@@ -160,7 +160,7 @@ One might like to be able to generate a full test of the ``ironman`` suite by se
 ...
 >>> d = Deferred().addCallback(IPBusPacket).addCallback(j).addCallback(buildResponsePacket).addCallback(printPacket)
 >>> d.callback('200000f02000010f00000002'.decode('hex'))  # read the upper limit
-raw: '200000f02000010000000039'
+raw: '200000f02000010039000000'
 Container:
     endian = (enum) BIG 240
     header = Container:
@@ -179,7 +179,7 @@ Container:
                 info_code = (enum) SUCCESS 0
             address = None
             data = ListContainer:
-                57
+                956301312
     status = None
     resend = None
 >>>

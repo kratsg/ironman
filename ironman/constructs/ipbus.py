@@ -1,9 +1,12 @@
 from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated
 from ironman.globals import IPBUS_VERSION
+import sys
 
 _IPBusWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32ub, Int32ul)
 _IPBusSignedWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32sb, Int32sl)
 IPBusWords = GreedyRange(Int32ub)
+if sys.byteorder == 'little':
+  IPBusWords = GreedyRange(Int32ul)
 
 PacketHeaderStruct = BitStruct(
                         "protocol_version" / OneOf(Nibble, [IPBUS_VERSION]),
