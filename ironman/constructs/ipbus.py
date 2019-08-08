@@ -47,7 +47,10 @@ Struct detailing the Control Header logic
 
 ControlStruct = "ControlTransaction" / Struct(
                     "header" / IfThenElse(this._.bigendian, ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
-                    "address" / IfThenElse(this._.bigendian, Int32ub, Int32ul),
+                    "address" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
+                      ("READ", "REQUEST"): IfThenElse(this._.bigendian, Int32ub, Int32ul),
+                      ("WRITE", "REQUEST"): IfThenElse(this._.bigendian, Int32ub, Int32ul)
+                    }),
 										"data" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
 											("READ","SUCCESS"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
 											("NOINCREAD","SUCCESS"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
