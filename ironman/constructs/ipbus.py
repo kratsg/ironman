@@ -1,5 +1,12 @@
 from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated
 from ironman.globals import IPBUS_VERSION
+import sys
+
+_IPBusWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32ub, Int32ul)
+_IPBusSignedWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32sb, Int32sl)
+IPBusWords = GreedyRange(Int32ub)
+if sys.byteorder == 'little':
+  IPBusWords = GreedyRange(Int32ul)
 
 PacketHeaderStruct = BitStruct(
                         "protocol_version" / OneOf(Nibble, [IPBUS_VERSION]),
@@ -46,19 +53,19 @@ Struct detailing the Control Header logic
 """
 
 ControlStruct = "ControlTransaction" / Struct(
-                    "header" / IfThenElse(this._.bigendian, ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
-                    "address" / If(this.header.info_code == "REQUEST", IfThenElse(this._.bigendian, Int32ub, Int32ul)),
+                    "header" / IfThenElse(this._.endian=='BIG', ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
+                    "address" / If(this.header.info_code == "REQUEST", _IPBusWordFactory(this)),
 										"data" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
-											("READ","SUCCESS"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-											("NOINCREAD","SUCCESS"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-											("RCONFIG","SUCCESS"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-                      ("WRITE","REQUEST"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-                      ("NOINCWRITE","REQUEST"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-                      ("WCONFIG","REQUEST"): Array(this.header.words, IfThenElse(this._.bigendian, Int32ub, Int32ul)),
-                      ("RMWBITS", "REQUEST"): ["and" / IfThenElse(this._.bigendian, Int32ub, Int32ul), "or" / IfThenElse(this._.bigendian, Int32ub, Int32ul)],
-                      ("RMWBITS", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul),
-                      ("RMWSUM", "REQUEST"): IfThenElse(this._.bigendian, Int32sb, Int32sl),  # note: signed 32-bit for subtraction!
-                      ("RMWSUM", "SUCCESS"): IfThenElse(this._.bigendian, Int32ub, Int32ul)
+											("READ","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
+											("NOINCREAD","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
+											("RCONFIG","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
+                      ("WRITE","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
+                      ("NOINCWRITE","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
+                      ("WCONFIG","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
+                      ("RMWBITS", "REQUEST"): ["and" / _IPBusWordFactory(this), "or" / _IPBusWordFactory(this)],
+                      ("RMWBITS", "SUCCESS"): _IPBusWordFactory(this),
+                      ("RMWSUM", "REQUEST"): _IPBusSignedWordFactory(this),  # note: signed 32-bit for subtraction!
+                      ("RMWSUM", "SUCCESS"): _IPBusWordFactory(this)
 										}, default=Check(lambda ctx: getattr(ctx, 'data', None) == None))
 )
 
@@ -83,12 +90,14 @@ ResendStruct = "ResendTransaction" / Struct()
 Struct detailing the Resend Action logic
 """
 
-IPBusWords = "IPBusWords" / Struct("data" / GreedyRange(Int32ub))
+Enum(Nibble,
+                          CONTROL = 0x0,
+                          STATUS = 0x1,
+                          RESEND = 0x2)
 
 IPBusConstruct = "IPBusPacket" / Struct(
-                    "pointer" / Pointer(3, Int8ub),
-                    "bigendian" / Computed(this.pointer == 0xf0),
-                    "header" / IfThenElse(this.bigendian, PacketHeaderStruct, ByteSwapped(PacketHeaderStruct)),  # defined as 'header' in context
+                    "endian" / Enum(Pointer(3, Int8ub), BIG=0xf0, LITTLE=0x20),
+                    "header" / IfThenElse(this.endian=='BIG', PacketHeaderStruct, ByteSwapped(PacketHeaderStruct)),  # defined as 'header' in context
 
                     "transactions" / If(lambda ctx: ctx.header.type_id == "CONTROL", GreedyRange(ControlStruct)),
                     "status" / If(lambda ctx: ctx.header.type_id == "STATUS", StatusRequestStruct),

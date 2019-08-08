@@ -1,4 +1,4 @@
-from ironman.constructs.ipbus import IPBusConstruct, PacketHeaderStruct, ControlHeaderStruct
+from ironman.constructs.ipbus import IPBusConstruct, IPBusWords, PacketHeaderStruct, ControlHeaderStruct
 from ironman.globals import TESTPACKETS
 from construct import StreamError, ValidationError
 
@@ -29,6 +29,18 @@ class TestIPBusControlPacket:
         """
         with pytest.raises(StreamError) as e:
             ControlHeaderStruct.parse(data)
+
+def test_data_endianness_switch():
+    data_big = '200000f020000100deadbeef'.decode('hex')
+    packet = IPBusConstruct.parse(data_big)
+    assert packet.endian == 'BIG'
+    assert packet.transactions[0].data == [0xdeadbeef]
+
+    packet.endian='LITTLE' # make it little-endian
+    data_lil = IPBusConstruct.build(packet)
+    assert data_lil.encode('hex') == 'f000002000010020efbeadde'
+    assert IPBusConstruct.parse(data_lil).endian == 'LITTLE'
+    assert IPBusConstruct.parse(data_lil).transactions[0].data == [0xdeadbeef]
 
 """
 foo = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03')

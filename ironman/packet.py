@@ -14,11 +14,7 @@ class IPBusPacket(object):
         self.request = None
         self.response = None
         self._raw = blob
-        # if little-endian, we need to swap when reading and writing
-        self.littleendian = bool((ord(self._raw[0])&0xf0)>>4 == 0xf)
-        # do some flipping
         raw = self.raw
-        if self.littleendian: raw = byteswap(raw)
         self.request = IPBusConstruct.parse(raw)
         self.response = IPBusConstruct.parse(raw)
 
