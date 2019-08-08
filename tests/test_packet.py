@@ -47,8 +47,8 @@ class TestIPBusControlPacketParse:
 
     def test_packet_swap(self):
         swapped_packet = IPBusPacket(byteswap(self.packet.raw))
-        assert self.packet == swapped_packet
-        assert not self.packet != swapped_packet
+        assert self.packet.request.endian != swapped_packet.request.endian
+        assert self.packet.request.transactions == swapped_packet.request.transactions
 
 class TestIPBusControlPacketSimpleParse:
     @pytest.fixture(autouse=True)
