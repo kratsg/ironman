@@ -63,7 +63,7 @@ class Jarvis(object):
             raise KeyError(transaction.address)
         protocol = protocol()
         if transaction.header.type_id == 'READ':
-            return IPBusWords.parse(protocol.read(transaction.address, transaction.header.words)).data
+            return IPBusWords.parse(protocol.read(transaction.address, transaction.header.words))
         elif transaction.header.type_id == 'WRITE':
             protocol.write(transaction.address, bytes(bytearray(transaction.data)))
             return
