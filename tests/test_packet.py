@@ -1,3 +1,4 @@
+import zope.interface.verify
 from zope.interface.verify import verifyClass, verifyObject
 from ironman.packet import IPBusPacket
 from ironman.interfaces import IIPBusPacket
@@ -24,8 +25,8 @@ def test_ipbus_packet_instance_iface(data):
 
 class TestIPBusControlPacketParse:
     @pytest.fixture(autouse=True,
-                    params=[TESTPACKETS['big-endian'], TESTPACKETS['little-endian'], TESTPACKETS['complex control']],
-                    ids=["big-endian packet", "little-endian packet", "complex control packet"])
+                    params=[TESTPACKETS['big-endian'], TESTPACKETS['little-endian'], TESTPACKETS['complex control'], TESTPACKETS['read response']],
+                    ids=["big-endian packet", "little-endian packet", "complex control packet", "read response packet"])
     def init_packet(self, request):
         self.packet = IPBusPacket(request.param)
 
