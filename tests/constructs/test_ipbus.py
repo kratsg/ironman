@@ -31,16 +31,16 @@ class TestIPBusControlPacket:
             ControlHeaderStruct.parse(data)
 
 def test_data_endianness_switch():
-    in_data = '200000f020000100deadbeef'.decode('hex')
-    packet = IPBusConstruct.parse(in_data)
-
+    data_big = '200000f020000100deadbeef'.decode('hex')
+    packet = IPBusConstruct.parse(data_big)
     assert packet.endian == 'BIG'
+    assert packet.transactions[0].data == [0xdeadbeef]
 
     packet.endian='LITTLE' # make it little-endian
-    out_data = IPBusConstruct.build(packet)
-    assert out_data.encode('hex') == 'f000002000010020efbeadde'
-
-    assert IPBusConstruct.parse(out_data).endian == 'LITTLE'
+    data_lil = IPBusConstruct.build(packet)
+    assert data_lil.encode('hex') == 'f000002000010020efbeadde'
+    assert IPBusConstruct.parse(data_lil).endian == 'LITTLE'
+    assert IPBusConstruct.parse(data_lil).transactions[0].data == [0xdeadbeef]
 
 """
 foo = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03')
