@@ -101,7 +101,7 @@ CheckError: check failed during building
 >>> out_p.transactions[0].header.info_code = 'SUCCESS'
 >>> out_data = IPBusConstruct.build(out_p)
 >>> print repr(out_data)
-' \x00\x00\xf0 \x00\x01\x00\x00\x00\x00\x031234'
+' \x00\x00\xf0 \x00\x01\x001234'
 >>>
 
 and our work is done! Notice that it's not just a matter of setting the data field and building the packet.. we must also set the ``info_code`` field to a ``SUCCESS`` to signify that we're sending a *successful* response back.
