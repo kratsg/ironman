@@ -1,4 +1,4 @@
-from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, OneOf, Nibble, Octet, If, IfThenElse, Bytes, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated, Int8ub
+from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, OneOf, Nibble, Octet, If, IfThenElse, Bytes, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated, Int8ub, Int32ub, Int32ul
 from ironman.globals import IPBUS_VERSION
 import sys
 
@@ -54,7 +54,7 @@ Struct detailing the Control Header logic
 
 ControlStruct = "ControlTransaction" / Struct(
                     "header" / IfThenElse(this._.endian=='BIG', ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
-                    "address" / If(this.header.info_code == "REQUEST", _IPBusWord),
+                    "address" / If(this.header.info_code == "REQUEST", IfThenElse(this._.endian=='BIG', Int32ub, Int32ul)),
 										"data" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
 											("READ","SUCCESS"): Array(this.header.words, _IPBusWord),
 											("NOINCREAD","SUCCESS"): Array(this.header.words, _IPBusWord),
