@@ -59,6 +59,7 @@ setup(name='ironman',
       ],
       extras_require={
         'testing': ['pytest'],
+        'docs': ['repoze.sphinx.autointerface'],
       },
       data_files=[('workbench', ['workbench/gFEXTest.py', 'workbench/xadc.yml'])],
 )
