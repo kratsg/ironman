@@ -1,12 +1,12 @@
-from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, Int8ub, Int32ub, Int32ul, Int32sb, Int32sl, OneOf, Nibble, Octet, If, IfThenElse, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated
+from construct import Array, BitsInteger, BitStruct, Enum, GreedyRange, Struct, OneOf, Nibble, Octet, If, IfThenElse, Bytes, ByteSwapped, this, Computed, Switch, Pointer, Check, Terminated, Int8ub
 from ironman.globals import IPBUS_VERSION
 import sys
 
-_IPBusWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32ub, Int32ul)
-_IPBusSignedWordFactory = lambda this: IfThenElse(this._.endian=='BIG', Int32sb, Int32sl)
-IPBusWords = GreedyRange(Int32ub)
-if sys.byteorder == 'little':
-  IPBusWords = GreedyRange(Int32ul)
+# internal _IPBusWord used inside of structs that depend on IPBusConstruct context for switching
+_IPBusWord = IfThenElse(this._.endian=='BIG', Bytes(4), ByteSwapped(Bytes(4)))
+
+IPBusWord = Bytes(4) if sys.byteorder == 'big' else ByteSwapped(Bytes(4))
+IPBusWords = GreedyRange(IPBusWord)
 
 PacketHeaderStruct = BitStruct(
                         "protocol_version" / OneOf(Nibble, [IPBUS_VERSION]),
@@ -54,18 +54,18 @@ Struct detailing the Control Header logic
 
 ControlStruct = "ControlTransaction" / Struct(
                     "header" / IfThenElse(this._.endian=='BIG', ControlHeaderStruct, ByteSwapped(ControlHeaderStruct)),
-                    "address" / If(this.header.info_code == "REQUEST", _IPBusWordFactory(this)),
+                    "address" / If(this.header.info_code == "REQUEST", _IPBusWord),
 										"data" / Switch(lambda ctx: (ctx.header.type_id, ctx.header.info_code), {
-											("READ","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
-											("NOINCREAD","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
-											("RCONFIG","SUCCESS"): Array(this.header.words, _IPBusWordFactory(this)),
-                      ("WRITE","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
-                      ("NOINCWRITE","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
-                      ("WCONFIG","REQUEST"): Array(this.header.words, _IPBusWordFactory(this)),
-                      ("RMWBITS", "REQUEST"): ["and" / _IPBusWordFactory(this), "or" / _IPBusWordFactory(this)],
-                      ("RMWBITS", "SUCCESS"): _IPBusWordFactory(this),
-                      ("RMWSUM", "REQUEST"): _IPBusSignedWordFactory(this),  # note: signed 32-bit for subtraction!
-                      ("RMWSUM", "SUCCESS"): _IPBusWordFactory(this)
+											("READ","SUCCESS"): Array(this.header.words, _IPBusWord),
+											("NOINCREAD","SUCCESS"): Array(this.header.words, _IPBusWord),
+											("RCONFIG","SUCCESS"): Array(this.header.words, _IPBusWord),
+                      ("WRITE","REQUEST"): Array(this.header.words, _IPBusWord),
+                      ("NOINCWRITE","REQUEST"): Array(this.header.words, _IPBusWord),
+                      ("WCONFIG","REQUEST"): Array(this.header.words, _IPBusWord),
+                      ("RMWBITS", "REQUEST"): ["and" / _IPBusWord, "or" / _IPBusWord],
+                      ("RMWBITS", "SUCCESS"): _IPBusWord,
+                      ("RMWSUM", "REQUEST"): _IPBusWord,  # note: signed 32-bit for subtraction!
+                      ("RMWSUM", "SUCCESS"): _IPBusWord
 										}, default=Check(lambda ctx: getattr(ctx, 'data', None) == None))
 )
 
@@ -79,8 +79,8 @@ Struct detailing the Control Action logic
 
 """
 
-StatusRequestStruct = "StatusTransaction" / Struct("data" / Array(15, OneOf(Int32ub, [0])))
-StatusResponseStruct = "StatusTransaction" / Struct("data" / Array(15, Int32ub))
+StatusRequestStruct = "StatusTransaction" / Struct("data" / Array(15, OneOf(_IPBusWord, [0])))
+StatusResponseStruct = "StatusTransaction" / Struct("data" / Array(15, _IPBusWord))
 """
 Struct detailing the Status Action logic
 """
@@ -90,18 +90,13 @@ ResendStruct = "ResendTransaction" / Struct()
 Struct detailing the Resend Action logic
 """
 
-Enum(Nibble,
-                          CONTROL = 0x0,
-                          STATUS = 0x1,
-                          RESEND = 0x2)
-
 IPBusConstruct = "IPBusPacket" / Struct(
                     "endian" / Enum(Pointer(3, Int8ub), BIG=0xf0, LITTLE=0x20),
                     "header" / IfThenElse(this.endian=='BIG', PacketHeaderStruct, ByteSwapped(PacketHeaderStruct)),  # defined as 'header' in context
 
-                    "transactions" / If(lambda ctx: ctx.header.type_id == "CONTROL", GreedyRange(ControlStruct)),
-                    "status" / If(lambda ctx: ctx.header.type_id == "STATUS", StatusRequestStruct),
-                    "resend" / If(lambda ctx: ctx.header.type_id == "RESEND", ResendStruct),
+                    "transactions" / If(this.header.type_id == "CONTROL", GreedyRange(ControlStruct)),
+                    "status" / If(this.header.type_id == "STATUS", StatusRequestStruct),
+                    "resend" / If(this.header.type_id == "RESEND", ResendStruct),
                     Terminated
 )
 """
