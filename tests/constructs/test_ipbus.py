@@ -34,13 +34,33 @@ def test_data_endianness_switch():
     data_big = '200000f020000100deadbeef'.decode('hex')
     packet = IPBusConstruct.parse(data_big)
     assert packet.endian == 'BIG'
-    assert packet.transactions[0].data == [0xdeadbeef]
+    assert packet.transactions[0].data == ['deadbeef'.decode('hex')]
 
     packet.endian='LITTLE' # make it little-endian
     data_lil = IPBusConstruct.build(packet)
     assert data_lil.encode('hex') == 'f000002000010020efbeadde'
     assert IPBusConstruct.parse(data_lil).endian == 'LITTLE'
-    assert IPBusConstruct.parse(data_lil).transactions[0].data == [0xdeadbeef]
+    assert IPBusConstruct.parse(data_lil).transactions[0].data == ['deadbeef'.decode('hex')]
+
+
+def test_packet_endian_equality():
+    read_req_big = '200000f02000010f00000003'.decode('hex')
+    read_res_big = '200000f020000100deadbeef'.decode('hex')
+
+    read_req_lil = 'f00000200f01002003000000'.decode('hex')
+    read_res_lil = 'f000002000010020efbeadde'.decode('hex')
+
+    res_p_big = IPBusConstruct.parse(read_req_big)
+    req_p_big = IPBusConstruct.parse(read_res_big)
+    res_p_lil = IPBusConstruct.parse(read_req_lil)
+    req_p_lil = IPBusConstruct.parse(read_res_lil)
+
+    assert res_p_big.endian == 'BIG'
+    assert res_p_lil.endian == 'LITTLE'
+    assert res_p_big.status == res_p_lil.status
+    assert res_p_big.resend == res_p_lil.resend
+    assert res_p_big.transactions[0].address == res_p_lil.transactions[0].address
+    assert res_p_big.transactions == res_p_lil.transactions
 
 """
 foo = IPBusConstruct.parse(b'\x20\x00\x00\xf0\x20\x00\x01\x0f\x00\x00\x00\x03')

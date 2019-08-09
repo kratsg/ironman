@@ -3,6 +3,7 @@ from zope.interface.verify import verifyClass, verifyObject
 from ironman.packet import IPBusPacket
 from ironman.interfaces import IIPBusPacket
 from ironman.utilities import byteswap
+from construct import ListContainer
 
 from ironman.globals import IPBUS_VERSION, TESTPACKETS
 
@@ -87,7 +88,7 @@ class TestIPBusControlPacketComplexParse:
     def test_length(self):
         assert len(self.packet.request.transactions) == 3
 
-    @pytest.fixture(params=[(0, 'WRITE', 0x6, [0x0]), (1, 'WRITE', 0x6, [0x1]), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
+    @pytest.fixture(params=[(0, 'WRITE', 0x6, ListContainer(['\x00\x00\x00\x00'])), (1, 'WRITE', 0x6, ListContainer(['\x00\x00\x00\x01'])), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
     def packet_details(self, request):
         return request.param
 
