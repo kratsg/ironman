@@ -7,5 +7,5 @@ incremental==17.5.0
 ironman==0.2.14
 pyyaml>=4.2b1
 six==1.10.0
-Twisted==17.5.0
+Twisted==19.7.0
 zope.interface==4.1.3
