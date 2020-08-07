@@ -62,17 +62,7 @@ class HardwareMap(dict):
 
     def parse(self, yml):
         doc = yaml.load(yml)
-        nodes = []
-        for n in doc.get('nodes', []):
-            if(str(n.get('mode')) == 'block'):
-                base = n.get('address')
-                size = n.get('size')
-                for i in range(base, base+size, 1):
-                    nodes.append(dict(id = n.get('id') + '_' + str(i-base), address = i, description = n.get('description') + " " + str(i - base)))
-            else:
-                nodes.append(n)
-
-        for node in nodes:
+        for node in doc.get('nodes', []):
             baseAddress = node.get('address')
             # this will check if there are any children later
             child = None
