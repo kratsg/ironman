@@ -47,6 +47,15 @@ class HardwareManager(dict):
         for address in self.raw_maps.pop(route, NullHardwareMap()).iterkeys():
             self.pop(address, NullHardwareNode())
 
+
+class BlockMemHardwareManager(HardwareManager):
+    def get_node(self, address):
+        blk = self.get(address) if address in self else self.get(min(self.keys(), key = lambda k: abs(k-address)))
+        if (blk != None and address <= blk.node.get('address') + blk.node.get('size',0)):
+            return blk
+        else:
+            return NullHardwareNode()
+
 class NullHardwareMap(dict):
     implements(IHardwareMap)
     route = None
@@ -101,6 +110,7 @@ class HardwareNode(dict):
         self['allowed'] = node.get('allowed', [])
         self['disallowed'] = node.get('disallowed', ['-1'])
         self.hw_map = hw_map
+        self.node = node
 
     @property
     def readable(self):
