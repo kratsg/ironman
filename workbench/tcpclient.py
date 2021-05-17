@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from twisted.internet import task
 from twisted.internet.defer import Deferred
 from twisted.internet.protocol import ClientFactory

@@ -2,7 +2,7 @@ import asyncore
 import socket, time
 
 # reference time (in seconds since 1900-01-01 00:00:00)
-TIME1970 = 2208988800L # 1970-01-01 00:00:00
+TIME1970 = 2208988800 # 1970-01-01 00:00:00
 
 class TimeRequest(asyncore.dispatcher):
     # time requestor (as defined in RFC 868)
@@ -27,7 +27,7 @@ class TimeRequest(asyncore.dispatcher):
 
         # get and unpack server time
         s = self.recv(4)
-        there = ord(s[3]) + (ord(s[2])<<8) + (ord(s[1])<<16) + (ord(s[0])<<24L)
+        there = ord(s[3]) + (ord(s[2])<<8) + (ord(s[1])<<16) + (ord(s[0])<<24)
 
         self.adjust_time(int(here - there))
 

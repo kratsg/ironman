@@ -2,7 +2,7 @@ import asyncore
 import socket, time
 
 # reference time
-TIME1970 = 2208988800L
+TIME1970 = 2208988800
 
 class TimeChannel(asyncore.dispatcher):
 

@@ -74,8 +74,8 @@ Struct detailing the Control Action logic
 
 .. note::
 
-  - RMWBits: Should compute via :math:`X \Leftarrow (X\wedge A)\\vee (B\wedge(!A))`
-  - RMWSum: Should compute via :math:`X \Leftarrow X+A`
+  - RMWBits: Should compute via :math:`X \\Leftarrow (X\\wedge A)\\vee (B\\wedge(!A))`
+  - RMWSum: Should compute via :math:`X \\Leftarrow X+A`
 
 """
 

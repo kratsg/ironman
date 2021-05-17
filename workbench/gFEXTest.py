@@ -138,14 +138,14 @@ class HTTPIPBus(Resource):
             request.write(json.dumps({
                 "success": False,
                 "data": None,
-                "error": "An unknown error has occurred with the application. Message: {0}".format(result.getErrorMessage()),
+                "error": "An unknown error has occurred with the application. Message: {}".format(result.getErrorMessage()),
                 "traceback": result.getBriefTraceback()
             }))
             request.finish()
 
         d = deferredGenerator()
         d.addCallbacks(write, error)
-        print("Handling IPBus packet {0:s}".format(packet))
+        print("Handling IPBus packet {:s}".format(packet))
         d.callback(packet.decode('hex'))
         return NOT_DONE_YET
 

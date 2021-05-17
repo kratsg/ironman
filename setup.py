@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import print_function
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import io, os, sys
@@ -13,7 +12,7 @@ def read(*filenames, **kwargs):
     sep = kwargs.get('sep', '\n')
     buf = []
     for filename in filenames:
-        with io.open(filename, encoding=encoding) as f:
+        with open(filename, encoding=encoding) as f:
             buf.append(f.read())
     return sep.join(buf)
 

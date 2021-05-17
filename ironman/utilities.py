@@ -14,7 +14,7 @@ class PrintContext(Construct):
     def _parse(self, *args):
         _, context = args
         import pdb; pdb.set_trace()
-        print context
+        print(context)
 
     def _build(self, *args):
         import pdb; pdb.set_trace()

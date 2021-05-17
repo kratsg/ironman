@@ -13,7 +13,7 @@ class IPBusServerProtocol(DatagramProtocol, Protocol):
 class IPBusServerFactory(ServerFactory):
   protocol = IPBusServerProtocol
 
-class Packet(object):
+class Packet:
   def __init__(self, data=None):
     self.packet_type = 1
     self.payload = ''
@@ -27,7 +27,7 @@ class Packet(object):
     return struct.pack(self.structure, self.packet_type, self.payload)
 
   def __str__(self):
-    return "Type: {0}\nPayload {1}\n\n".format(self.packet_type, self.payload)
+    return "Type: {}\nPayload {}\n\n".format(self.packet_type, self.payload)
 
 def main():
   reactor.listenTCP(8000, IPBusServerFactory())

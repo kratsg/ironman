@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # ironman documentation build configuration file, created by
 # sphinx-quickstart on Fri Oct 30 12:51:21 2015.
@@ -54,9 +53,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'ironman'
-copyright = u'2015, Giordon Stark'
-author = u'Giordon Stark'
+project = 'ironman'
+copyright = '2015, Giordon Stark'
+author = 'Giordon Stark'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -242,8 +241,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'ironman.tex', u'ironman Documentation',
-   u'Giordon Stark', 'manual'),
+  (master_doc, 'ironman.tex', 'ironman Documentation',
+   'Giordon Stark', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -272,7 +271,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'ironman', u'ironman Documentation',
+    (master_doc, 'ironman', 'ironman Documentation',
      [author], 1)
 ]
 
@@ -286,7 +285,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'ironman', u'ironman Documentation',
+  (master_doc, 'ironman', 'ironman Documentation',
    author, 'ironman', 'One line description of project.',
    'Miscellaneous'),
 ]

@@ -1,9 +1,9 @@
-from zope.interface import implements
+from zope.interface import implementer
 from ironman.interfaces import IHardwareManager, IHardwareMap, IHardwareNode
 import yaml
 
+@implementer(IHardwareManager)
 class HardwareManager(dict):
-    implements(IHardwareManager)
     raw_maps = {}
 
     def check_data(self, address, data):
@@ -31,11 +31,11 @@ class HardwareManager(dict):
         """
         new_route = new_hw_map.route
         if new_route in self.raw_maps:
-            raise KeyError("HW Map already exists: {0:s}".format(new_hw_map.route))
+            raise KeyError("HW Map already exists: {:s}".format(new_hw_map.route))
 
         common_addresses = set(self).intersection(new_hw_map)
         if common_addresses:
-            raise ValueError("An address in {0:s} already exists in the manager".format(new_route))
+            raise ValueError("An address in {:s} already exists in the manager".format(new_route))
         # all ok, add it all
         self.raw_maps[new_route] = new_hw_map
         self.update(new_hw_map)
@@ -56,14 +56,14 @@ class BlockMemHardwareManager(HardwareManager):
         else:
             return NullHardwareNode()
 
+@implementer(IHardwareMap)
 class NullHardwareMap(dict):
-    implements(IHardwareMap)
     route = None
     def parse(self, yml): pass
     def isOk(self): return False
 
+@implementer(IHardwareMap)
 class HardwareMap(dict):
-    implements(IHardwareMap)
 
     def __init__(self, yml, route):
         self.route = route
@@ -78,7 +78,7 @@ class HardwareMap(dict):
             for child in node.get('nodes', []):
                 childAddress = child.get('address')
                 absAddress = baseAddress+childAddress
-                if absAddress in self: raise KeyError('{0:s}/{1:s}'.format(node['id'],child['id']))
+                if absAddress in self: raise KeyError('{:s}/{:s}'.format(node['id'],child['id']))
                 self[absAddress] = HardwareNode(child, self)
             # no children
             if child is None:
@@ -89,8 +89,8 @@ class HardwareMap(dict):
             if not v.isOk(): return False
         return True
 
+@implementer(IHardwareMap)
 class NullHardwareNode(dict):
-    implements(IHardwareNode)
 
     hw_map = NullHardwareMap()
     readable = False
@@ -101,8 +101,8 @@ class NullHardwareNode(dict):
     allowed = set()
     disallowed = set()
 
+@implementer(IHardwareMap)
 class HardwareNode(dict):
-    implements(IHardwareNode)
 
     def __init__(self, node, hw_map):
         #self['description'] = getattr(node, 'description', '')

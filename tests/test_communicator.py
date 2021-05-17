@@ -48,20 +48,20 @@ class TestJarvis:
     def test_jarvis_no_read(self):
         with pytest.raises(AttributeError) as excinfo:
             @self.j.register('bad-method')
-            class Bad(object):
+            class Bad:
                 def write(self): pass
         assert "has no attribute 'read'" in str(excinfo.value)
 
     def test_jarvis_no_write(self):
         with pytest.raises(AttributeError) as excinfo:
             @self.j.register('bad-method')
-            class Bad(object):
+            class Bad:
                 def read(self): pass
         assert "has no attribute 'write'" in str(excinfo.value)
 
     def test_jarvis_ducktyping(self):
         @self.j.register('ok-method')
-        class Ok(object):
+        class Ok:
             def read(self): pass
             def write(self): pass
         assert 1  # we should have no error

@@ -4,11 +4,12 @@
     Jarvis provides a callback structure that looks up (in its registry) for an appropriate communication protocol.
 """
 
-from zope.interface import implements
-from ironman.interfaces import ICommunicationSlave, ICommunicationDriver
+from zope.interface import implementer
+from ironman.interfaces import ICommunicationSlave, ICommunicationDriver, IHardwareNode
 from ironman.constructs.ipbus import IPBusWords
 
-class Jarvis(object):
+@implementer(IHardwareNode)
+class Jarvis:
     """ This is the general communication slave.
 
         Jarvis is what lets us pass around communications to various routes/protocols
@@ -37,7 +38,6 @@ class Jarvis(object):
 
     """
 
-    implements(ICommunicationSlave)
 
     def __init__(self):
         self.registry = {}
@@ -72,7 +72,7 @@ class Jarvis(object):
         if route is None:
             raise ValueError('Must specify a route')
         if route in self.registry:
-            raise KeyError("{0:s} is an existing route to {1:s}".format(route, self.registry[route].__name__))
+            raise KeyError("{:s} is an existing route to {:s}".format(route, self.registry[route].__name__))
         def register_wrapper(cls):
             """ Duck-typing checks
             """
@@ -84,8 +84,8 @@ class Jarvis(object):
     def unregister(self, route):
         del self.registry[route]
 
-class SimpleIO(object):
-    implements(ICommunicationDriver)
+@implementer(IHardwareNode)
+class SimpleIO:
     __f__ = None
 
     def read(self, offset, size):
@@ -98,8 +98,8 @@ class SimpleIO(object):
             f.seek(offset)
             return f.write(data)
 
-class ComplexIO(object):
-    implements(ICommunicationDriver)
+@implementer(ICommunicationDriver)
+class ComplexIO:
     __f__ = {}
 
     def read(self, offset, size):

@@ -12,7 +12,7 @@ class UDP(DatagramProtocol):
         After receiving a datagram, generate the deferreds and add myself to it.
         """
         def write(result):
-            print "Writing %r" % result
+            print ("Writing %r" % result)
             self.transport.write(result, address)
 
         d = self.d()
@@ -29,7 +29,7 @@ class TCP(Protocol):
         After receiving the data, generate the deferreds and add myself to it.
         """
         def write(result):
-            print "Writing %r" % result
+            print ("Writing %r" % result)
             self.transport.write(result)
         d = self.d()
         d.addCallback(write)  # errors are silently ignored!
@@ -59,7 +59,7 @@ class FauxCP(Protocol):
         """
         def write(result):
             fauxResult = self._addPreIPBusHeader(result)
-            print "Writing %r" % fauxResult
+            print ("Writing %r" % fauxResult)
             self.transport.write(fauxResult)
         d = self.d()
         d.addCallback(write)  # errors are silently ignored!
