@@ -1,4 +1,12 @@
-include README.md
+prune **
+graft src
+
+include setup.py
+include setup.cfg
 include LICENSE
-include workbench/gFEXTest.py
-include workbench/xadc.yml
+include README.rst
+include pyproject.toml
+include MANIFEST.in
+include AUTHORS
+
+global-exclude __pycache__ *.py[cod]
