@@ -4,11 +4,12 @@ from .interfaces import IHistory
 from .constructs.ipbus import IPBusConstruct
 import collections
 
+
 @implementer(IHistory)
 class History(dict):
     def __init__(self, maxlen=100):
         self.maxlen = maxlen
-        self.packets = collections.deque([None]*self.maxlen, maxlen=self.maxlen)
+        self.packets = collections.deque([None] * self.maxlen, maxlen=self.maxlen)
 
     def record(self, packet):
         # make sure packet doesn't exist first
@@ -19,5 +20,8 @@ class History(dict):
             del self[self.packets[0].request.header.id]
         # Add new packet to history
         self.packets.append(packet)
-        self[packet.request.header.id] = (IPBusConstruct.build(packet.request).hex(), IPBusConstruct.build(packet.response).hex())
+        self[packet.request.header.id] = (
+            IPBusConstruct.build(packet.request).hex(),
+            IPBusConstruct.build(packet.response).hex(),
+        )
         return packet
