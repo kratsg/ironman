@@ -1,7 +1,7 @@
 from setuptools import setup
 
 extras_require = {}
-extras_require['docs'] = ['repoze.sphinx.autointerface']
+extras_require['docs'] = ['Sphinx<4', 'sphinx_rtd_theme', 'repoze.sphinx.autointerface']
 extras_require['lint'] = sorted({'flake8', 'black'})
 extras_require['test'] = [
     'pytest~=6.0',
