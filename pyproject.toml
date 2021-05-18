@@ -41,9 +41,8 @@ ignore = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--ignore=setup.py --ignore=docs/conf.py --strict --verbose --tb=long --cov=ironman --cov-report=term-missing --cov-config=.coveragerc --cov-report xml --doctest-modules --doctest-glob='docs/*.rst'"
+addopts = "--import-mode importlib --ignore=setup.py --ignore=docs/conf.py --strict --verbose --tb=long --cov=ironman --cov-report=term-missing --cov-config=.coveragerc --cov-report xml --doctest-modules --doctest-glob='docs/*.rst'"
 testpaths = [
-    "src",
     "tests",
     "docs",
 ]
