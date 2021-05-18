@@ -2,7 +2,7 @@
 
 # Ironman
 
-[![PyPI version](https://badge.fury.io/py/ironman.svg)](https://badge.fury.io/py/ironman) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://iron-man.readthedocs.org/en/latest/intro.html)
+[![PyPI version](https://badge.fury.io/py/ironman.svg)](https://badge.fury.io/py/ironman) [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](http://ironman.readthedocs.org/en/latest/intro.html)
 
 [![Build Status](https://travis-ci.org/kratsg/ironman.svg?branch=master)](https://travis-ci.org/kratsg/ironman) [![codecov](https://codecov.io/gh/kratsg/ironman/branch/master/graph/badge.svg)](https://codecov.io/gh/kratsg/ironman)
  [![Code Health](https://landscape.io/github/kratsg/ironman/master/landscape.svg?style=flat)](https://landscape.io/github/kratsg/ironman/master)

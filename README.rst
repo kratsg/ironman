@@ -122,7 +122,7 @@ Ideas
 .. |PyPI version| image:: https://badge.fury.io/py/ironman.svg
    :target: https://badge.fury.io/py/ironman
 .. |Docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
-   :target: http://iron-man.readthedocs.org/en/latest/intro.html
+   :target: http://ironman.readthedocs.org/en/latest/intro.html
 .. |Build Status| image:: https://travis-ci.org/kratsg/ironman.svg?branch=master
    :target: https://travis-ci.org/kratsg/ironman
 .. |codecov| image:: https://codecov.io/gh/kratsg/ironman/branch/master/graph/badge.svg
