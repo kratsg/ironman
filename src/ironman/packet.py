@@ -1,15 +1,14 @@
 # Packet object that manages the formats of our packets
 # http://stackoverflow.com/questions/5189232/how-to-auto-register-a-class-when-its-defined
 
-from zope.interface import implements
-from interfaces import IIPBusPacket
-from utilities import byteswap
+from zope.interface import implementer
+from .interfaces import IIPBusPacket
 
-from constructs.ipbus import IPBusConstruct
+from .constructs.ipbus import IPBusConstruct
 
-class IPBusPacket(object):
-    implements(IIPBusPacket)
 
+@implementer(IIPBusPacket)
+class IPBusPacket:
     def __init__(self, blob):
         self.request = None
         self.response = None
@@ -43,8 +42,7 @@ class IPBusPacket(object):
         return self.request.header.type_id
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__)
-                and self.request == other.request)
+        return isinstance(other, self.__class__) and self.request == other.request
 
     def __ne__(self, other):
         return not self.__eq__(other)

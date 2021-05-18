@@ -10,6 +10,7 @@ import pytest
 
 hwmanager = HardwareManager()
 
+
 class TestJarvis:
     @pytest.fixture(autouse=True)
     def set_up(self):
@@ -34,7 +35,7 @@ class TestJarvis:
 
     def test_jarvis_packet(self, tmpdir):
         f = tmpdir.mkdir("sub").join("hello.txt")
-        f.write_binary("helloworld")
+        f.write_binary(b"helloworld")
 
         @self.j.register('file')
         class TestIO(SimpleIO):
@@ -47,21 +48,31 @@ class TestJarvis:
 
     def test_jarvis_no_read(self):
         with pytest.raises(AttributeError) as excinfo:
+
             @self.j.register('bad-method')
-            class Bad(object):
-                def write(self): pass
+            class Bad:
+                def write(self):
+                    pass
+
         assert "has no attribute 'read'" in str(excinfo.value)
 
     def test_jarvis_no_write(self):
         with pytest.raises(AttributeError) as excinfo:
+
             @self.j.register('bad-method')
-            class Bad(object):
-                def read(self): pass
+            class Bad:
+                def read(self):
+                    pass
+
         assert "has no attribute 'write'" in str(excinfo.value)
 
     def test_jarvis_ducktyping(self):
         @self.j.register('ok-method')
-        class Ok(object):
-            def read(self): pass
-            def write(self): pass
+        class Ok:
+            def read(self):
+                pass
+
+            def write(self):
+                pass
+
         assert 1  # we should have no error

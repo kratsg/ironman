@@ -1,0 +1,49 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["wheel", "setuptools>=30.3.0", "attrs>=17.1", "setuptools_scm[toml]>=3.4"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/ironman/version.py"
+local_scheme = "no-local-version"
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38']
+skip-string-normalization = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | .eggs
+  | build
+)/
+'''
+
+[tool.check-manifest]
+ignore = [
+    'docs*',
+    'validation*',
+    'examples*',
+    'tests*',
+    'docker*',
+    'binder*',
+    '.*',
+    'pyproject.toml',
+    'pytest.ini',
+    'codecov.yml',
+    'codemeta.json',
+    'CODE_OF_CONDUCT.md',
+    'CONTRIBUTING.md',
+    'AUTHORS',
+]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--import-mode importlib --ignore=setup.py --ignore=docs/conf.py --strict --verbose --tb=long --cov=ironman --cov-report=term-missing --cov-config=.coveragerc --cov-report xml --doctest-modules --doctest-glob='docs/*.rst'"
+testpaths = [
+    "tests",
+    "docs",
+]
+doctest_optionflags = "NORMALIZE_WHITESPACE"

@@ -1,9 +1,40 @@
-*.pyc
+src/ironman/version.py
+MANIFEST
+build
+dist
+_build
+docs/man/*.gz
+docs/_*/
+*.py[co]
 __pycache__
 .cache
+*.egg-info
+*.eggs
+*~
+*.bak
+.ipynb_checkpoints
 .tox
-ironman.egg-info
-_build
-.coverage
-dist
 .DS_Store
+\#*#
+.#*
+.coverage*
+!.coveragerc
+coverage*
+*,cover
+
+*.swp
+*.map
+.idea/
+Read the Docs
+config.rst
+
+/.project
+/.pydevproject
+
+# pytest
+.pytest_cache
+htmlcov
+.benchmarks
+
+# text editors
+.vscode/
