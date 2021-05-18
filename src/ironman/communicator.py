@@ -8,7 +8,7 @@ from zope.interface import implementer
 from ironman.interfaces import ICommunicationSlave, ICommunicationDriver, IHardwareNode
 from ironman.constructs.ipbus import IPBusWords
 
-@implementer(IHardwareNode)
+@implementer(ICommunicationSlave)
 class Jarvis:
     """ This is the general communication slave.
 

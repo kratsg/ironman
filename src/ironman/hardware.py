@@ -101,7 +101,7 @@ class NullHardwareNode(dict):
     allowed = set()
     disallowed = set()
 
-@implementer(IHardwareMap)
+@implementer(IHardwareNode)
 class HardwareNode(dict):
 
     def __init__(self, node, hw_map):
