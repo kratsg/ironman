@@ -4,8 +4,7 @@ from ironman.interfaces import IHardwareManager, IHardwareMap, IHardwareNode
 
 import pytest
 
-testYML = \
-"""
+testYML = """
 nodes:
     -
         id: temperature
@@ -48,6 +47,7 @@ nodes:
         nodes: [*raw, *scale]
 """
 
+
 class TestHardwareManager:
     def test_hardware_manager_create(self):
         obj = HardwareManager()
@@ -60,6 +60,7 @@ class TestHardwareManager:
     def test_hardware_manager_instance_iface(self):
         # Assure instances of the class provide the declared interface
         assert verifyObject(IHardwareManager, HardwareManager())
+
 
 class TestHardwareMap:
     @pytest.fixture(autouse=True)
@@ -77,6 +78,7 @@ class TestHardwareMap:
         # Assure instances of the class provide the declared interface
         assert verifyObject(IHardwareMap, self.hwmap)
 
+
 class TestHardwareNodeInterface:
     def test_hardware_node_create(self):
         obj = HardwareNode({'permissions': 2}, {})
@@ -90,13 +92,17 @@ class TestHardwareNodeInterface:
         # Assure instances of the class provide the declared interface
         assert verifyObject(IHardwareNode, HardwareNode({}, {}))
 
+
 class TestHardwareNode:
-    @pytest.fixture(autouse=True, params=[
-        {"permissions": 0, "readable": False, "writeable": False, "isOk": False},
-        {"permissions": 1, "readable": True, "writeable": False, "isOk": True},
-        {"permissions": 2, "readable": False, "writeable": True, "isOk": False},
-        {"permissions": 3, "readable": True, "writeable": True, "isOk": True}
-    ])
+    @pytest.fixture(
+        autouse=True,
+        params=[
+            {"permissions": 0, "readable": False, "writeable": False, "isOk": False},
+            {"permissions": 1, "readable": True, "writeable": False, "isOk": True},
+            {"permissions": 2, "readable": False, "writeable": True, "isOk": False},
+            {"permissions": 3, "readable": True, "writeable": True, "isOk": True},
+        ],
+    )
     def init_node(self, request):
         self.data = request.param
         self.node = HardwareNode(request.param, {})

@@ -10,24 +10,48 @@ from ironman.globals import IPBUS_VERSION, TESTPACKETS
 # fixtures for passing in the objects
 import pytest
 
-@pytest.mark.parametrize("data", [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']], ids=["big-endian packet", "little-endian packet"])
+
+@pytest.mark.parametrize(
+    "data",
+    [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']],
+    ids=["big-endian packet", "little-endian packet"],
+)
 def test_ipbus_packet_create(data):
     obj = IPBusPacket(data)
     assert obj is not None
+
 
 def test_ipbus_packet_class_iface():
     # Assure the class implements the declared interface
     assert verifyClass(IIPBusPacket, IPBusPacket)
 
-@pytest.mark.parametrize("data", [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']], ids=["big-endian packet", "little-endian packet"])
+
+@pytest.mark.parametrize(
+    "data",
+    [TESTPACKETS['big-endian'], TESTPACKETS['little-endian']],
+    ids=["big-endian packet", "little-endian packet"],
+)
 def test_ipbus_packet_instance_iface(data):
     # Assure instances of the class provide the declared interface
     assert verifyObject(IIPBusPacket, IPBusPacket(data))
 
+
 class TestIPBusControlPacketParse:
-    @pytest.fixture(autouse=True,
-                    params=[TESTPACKETS['big-endian'], TESTPACKETS['little-endian'], TESTPACKETS['complex control'], TESTPACKETS['read response']],
-                    ids=["big-endian packet", "little-endian packet", "complex control packet", "read response packet"])
+    @pytest.fixture(
+        autouse=True,
+        params=[
+            TESTPACKETS['big-endian'],
+            TESTPACKETS['little-endian'],
+            TESTPACKETS['complex control'],
+            TESTPACKETS['read response'],
+        ],
+        ids=[
+            "big-endian packet",
+            "little-endian packet",
+            "complex control packet",
+            "read response packet",
+        ],
+    )
     def init_packet(self, request):
         self.packet = IPBusPacket(request.param)
 
@@ -41,7 +65,7 @@ class TestIPBusControlPacketParse:
         assert self.packet.packet_id == 0x0
 
     def test_byteorder(self):
-        assert self.packet.byteorder == 0xf
+        assert self.packet.byteorder == 0xF
 
     def test_control_type(self):
         assert self.packet.packet_type == 'CONTROL'
@@ -54,6 +78,7 @@ class TestIPBusControlPacketParse:
         assert self.packet.request.endian != swapped_packet.request.endian
         assert self.packet.request.transactions == swapped_packet.request.transactions
 
+
 class TestIPBusControlPacketSimpleParse:
     @pytest.fixture(autouse=True)
     def init_packet(self):
@@ -63,7 +88,15 @@ class TestIPBusControlPacketSimpleParse:
         assert len(self.packet.request.transactions) == 1
 
     # specify details about inside packets
-    @pytest.fixture(params=[(0, 'READ', )], ids=["first"])
+    @pytest.fixture(
+        params=[
+            (
+                0,
+                'READ',
+            )
+        ],
+        ids=["first"],
+    )
     def packet_details(self, request):
         return request.param
 
@@ -83,6 +116,7 @@ class TestIPBusControlPacketSimpleParse:
         i, _ = packet_details
         assert self.packet.request.transactions[i].header.info_code == 'REQUEST'
 
+
 class TestIPBusControlPacketComplexParse:
     @pytest.fixture(autouse=True)
     def init_packet(self):
@@ -91,7 +125,14 @@ class TestIPBusControlPacketComplexParse:
     def test_length(self):
         assert len(self.packet.request.transactions) == 3
 
-    @pytest.fixture(params=[(0, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x00'])), (1, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x01'])), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
+    @pytest.fixture(
+        params=[
+            (0, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x00'])),
+            (1, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x01'])),
+            (2, 'READ', 0x3, None),
+        ],
+        ids=["first", "second", "third"],
+    )
     def packet_details(self, request):
         return request.param
 
