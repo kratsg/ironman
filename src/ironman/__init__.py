@@ -1,4 +1,4 @@
-__version__ = '0.4.1'
+from .version import version as __version__
 __all__ = ['communicator',
            'hardware',
            'history',
