@@ -2,9 +2,9 @@ import zope.interface.verify
 from zope.interface.verify import verifyClass, verifyObject
 from ironman.packet import IPBusPacket
 from ironman.interfaces import IIPBusPacket
-from ironman.utilities import byteswap
 from construct import ListContainer
 
+import array
 from ironman.globals import IPBUS_VERSION, TESTPACKETS
 
 # fixtures for passing in the objects
@@ -47,7 +47,10 @@ class TestIPBusControlPacketParse:
         assert self.packet.packet_type == 'CONTROL'
 
     def test_packet_swap(self):
-        swapped_packet = IPBusPacket(byteswap(self.packet.raw))
+        _raw = array.array("I", self.packet.raw)
+        _raw.byteswap()
+        swapped_raw = _raw.tobytes()
+        swapped_packet = IPBusPacket(swapped_raw)
         assert self.packet.request.endian != swapped_packet.request.endian
         assert self.packet.request.transactions == swapped_packet.request.transactions
 
@@ -88,7 +91,7 @@ class TestIPBusControlPacketComplexParse:
     def test_length(self):
         assert len(self.packet.request.transactions) == 3
 
-    @pytest.fixture(params=[(0, 'WRITE', 0x6, ListContainer(['\x00\x00\x00\x00'])), (1, 'WRITE', 0x6, ListContainer(['\x00\x00\x00\x01'])), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
+    @pytest.fixture(params=[(0, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x00'])), (1, 'WRITE', 0x6, ListContainer([b'\x00\x00\x00\x01'])), (2, 'READ', 0x3, None)], ids=["first", "second", "third"])
     def packet_details(self, request):
         return request.param
 

@@ -1,7 +1,6 @@
 from ironman.constructs.ipbus import IPBusConstruct, IPBusWords, PacketHeaderStruct, ControlHeaderStruct
 from ironman.globals import TESTPACKETS
 from construct import StreamError, ValidationError
-
 import pytest
 
 def test_parse_big_endian():
@@ -31,24 +30,24 @@ class TestIPBusControlPacket:
             ControlHeaderStruct.parse(data)
 
 def test_data_endianness_switch():
-    data_big = '200000f020000100deadbeef'.decode('hex')
+    data_big = bytearray.fromhex('200000f020000100deadbeef')
     packet = IPBusConstruct.parse(data_big)
     assert packet.endian == 'BIG'
-    assert packet.transactions[0].data == ['deadbeef'.decode('hex')]
+    assert packet.transactions[0].data == [bytearray.fromhex('deadbeef')]
 
     packet.endian='LITTLE' # make it little-endian
     data_lil = IPBusConstruct.build(packet)
-    assert data_lil.encode('hex') == 'f000002000010020efbeadde'
+    assert data_lil == bytearray.fromhex('f000002000010020efbeadde')
     assert IPBusConstruct.parse(data_lil).endian == 'LITTLE'
-    assert IPBusConstruct.parse(data_lil).transactions[0].data == ['deadbeef'.decode('hex')]
+    assert IPBusConstruct.parse(data_lil).transactions[0].data == [bytearray.fromhex('deadbeef')]
 
 
 def test_packet_endian_equality():
-    read_req_big = '200000f02000010f00000003'.decode('hex')
-    read_res_big = '200000f020000100deadbeef'.decode('hex')
+    read_req_big = bytearray.fromhex('200000f02000010f00000003')
+    read_res_big = bytearray.fromhex('200000f020000100deadbeef')
 
-    read_req_lil = 'f00000200f01002003000000'.decode('hex')
-    read_res_lil = 'f000002000010020efbeadde'.decode('hex')
+    read_req_lil = bytearray.fromhex('f00000200f01002003000000')
+    read_res_lil = bytearray.fromhex('f000002000010020efbeadde')
 
     res_p_big = IPBusConstruct.parse(read_req_big)
     req_p_big = IPBusConstruct.parse(read_res_big)

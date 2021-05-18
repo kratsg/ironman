@@ -13,7 +13,7 @@ class TestIPBus:
     def init_server(self):
         # an example response of how one might create the deferred
         def example_response(datagram):
-            key = (key for key,value in TESTPACKETS.items() if value==datagram).next()
+            key = next(key for key,value in TESTPACKETS.items() if value==datagram)
             return TESTRESPONSES[key]
 
         from twisted.test import proto_helpers

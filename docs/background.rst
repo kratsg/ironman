@@ -54,11 +54,11 @@ For those who are more familiar or learn better with some code:
 >>>
 >>> # listen for IPBus packets over UDP at port 8888
 >>> reactor.listenUDP(8888, ServerFactory('udp', callbacks))
-<ironman.server.UDP on 8888>
+<<class 'ironman.server.UDP'> on 8888>
 >>>
 >>> # listen for IPBus packets over TCP at port 8889
 >>> reactor.listenTCP(8889, ServerFactory('tcp', callbacks))
-<<class 'twisted.internet.tcp.Port'> of ironman.server.TCPFactory on 8889>
+<<class 'twisted.internet.tcp.Port'> of <class 'ironman.server.TCPFactory'> on 8889>
 
 and of course, this is all building up our logic. To actually start up the server, we simply need::
 

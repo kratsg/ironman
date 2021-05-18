@@ -3,7 +3,6 @@
 
 from zope.interface import implementer
 from ironman.interfaces import IIPBusPacket
-from ironman.utilities import byteswap
 
 from ironman.constructs.ipbus import IPBusConstruct
 

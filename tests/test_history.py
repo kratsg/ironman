@@ -1,7 +1,6 @@
 from zope.interface.verify import verifyClass, verifyObject
 from ironman.history import History
 from ironman.interfaces import IHistory
-from ironman.utilities import byteswap
 
 from ironman.globals import IPBUS_VERSION, TESTPACKETS
 from ironman.packet import IPBusPacket

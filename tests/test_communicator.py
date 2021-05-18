@@ -34,7 +34,7 @@ class TestJarvis:
 
     def test_jarvis_packet(self, tmpdir):
         f = tmpdir.mkdir("sub").join("hello.txt")
-        f.write_binary("helloworld")
+        f.write_binary(b"helloworld")
 
         @self.j.register('file')
         class TestIO(SimpleIO):
