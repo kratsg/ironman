@@ -25,14 +25,14 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip tox
+        python -m pip install --upgrade pip
         python -m pip install --upgrade --editable .
     - name: List installed Python packages
       run: |
         python -m pip list
     - name: Test with pytest
       run: |
-        python -m tox
+        python -m pytest
     - name: Report core project coverage with Codecov
       if: github.event_name == 'push' && matrix.python-version == 3.8 && matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v1
