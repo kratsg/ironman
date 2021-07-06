@@ -67,7 +67,7 @@ jobs:
       run: tar --list --file dist/ironman-*.tar.gz
     - name: Publish distribution 📦 to Test PyPI
       # every PR will trigger a push event on master, so check the push event is actually coming from master
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'kratsg/ironman' && false
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'kratsg/ironman'
       uses: pypa/gh-action-pypi-publish@v1.4.2
       with:
         password: ${{ secrets.test_pypi_password }}
