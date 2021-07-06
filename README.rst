@@ -85,14 +85,9 @@ Releasing
 ~~~~~~~~~
 
 1. Do some work on your package (i.e. fix bugs, add features, etc)
-2. Make sure the tests pass. Run ``tox`` (for just tests)
-   ``tox -e coverage`` (for tests and coverage)
-3. Update the ``__version__`` number in your package's
-   `**init**.py <ironman/__init__.py>`__ file
-4. "Freeze" your code by creating a tag:
-   ``git tag -a x.y.z -m "Your message here..."``
-5. Run ``python setup.py sdist`` upload to upload the new version of
-   your package to PyPI
+2. Make sure the tests pass. Run ``pytest``.
+3. Update the ``__version__`` number via ``bump2version``.
+4. Push to the default branch.
 
 Tutorial
 --------
