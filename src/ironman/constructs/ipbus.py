@@ -83,7 +83,7 @@ ControlStruct = "ControlTransaction" / Struct(
     "address"
     / If(
         this.header.info_code == "REQUEST",
-        IfThenElse(this._.endian == 'BIG', Int32ub, Int32ul),
+        IfThenElse(this._.endian == 'BIG', Bytes(4), ByteSwapped(Bytes(4))),
     ),
     "data"
     / Switch(

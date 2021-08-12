@@ -53,6 +53,7 @@ class HardwareManager(dict):
 
 class BlockMemHardwareManager(HardwareManager):
     def get_node(self, address):
+        address = int.from_bytes(address, 'big')
         blk = (
             self.get(address)
             if address in self
