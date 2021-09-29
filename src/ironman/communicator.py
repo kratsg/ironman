@@ -6,7 +6,7 @@
 
 from zope.interface import implementer
 from .interfaces import ICommunicationSlave, ICommunicationDriver, IHardwareNode
-from .constructs.ipbus import IPBusWords
+from .constructs.ipbus import IPBusWords, IPBusWords_long
 
 
 @implementer(ICommunicationSlave)
@@ -68,6 +68,9 @@ class Jarvis:
             return IPBusWords.parse(
                 protocol.read(transaction.address, transaction.header.words)
             )
+        elif transaction.header.type_id == 'RMWBITS':  # ECC - new case to handle RMWBITS
+            protocol.rmwbits(transaction.address, IPBusWords_long.build(transaction.data))
+            return
         elif transaction.header.type_id == 'WRITE':
             protocol.write(transaction.address, IPBusWords.build(transaction.data))
             return

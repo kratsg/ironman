@@ -30,6 +30,7 @@ class HardwareManager(dict):
         """
         Add the HW map only if it doesn't exist for a given key, and no address collisions
         """
+
         new_route = new_hw_map.route
         if new_route in self.raw_maps:
             raise KeyError("HW Map already exists: {:s}".format(new_hw_map.route))
@@ -84,7 +85,7 @@ class HardwareMap(dict):
         self.parse(yml)
 
     def parse(self, yml):
-        doc = yaml.load(yml)
+        doc = yaml.safe_load(yml)
         for node in doc.get('nodes', []):
             baseAddress = node.get('address')
             # this will check if there are any children later
