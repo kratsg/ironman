@@ -30,6 +30,12 @@ _IPBusWord = IfThenElse(this._.endian == 'BIG', Bytes(4), ByteSwapped(Bytes(4)))
 IPBusWord = Bytes(4) if sys.byteorder == 'big' else ByteSwapped(Bytes(4))
 IPBusWords = GreedyRange(IPBusWord)
 
+# ECC - handle byteswapping in rmwbits
+_IPBusWord_long = IfThenElse(this._.endian == 'BIG', Bytes(8), ByteSwapped(Bytes(8)))
+IPBusWord_long = Bytes(8) if sys.byteorder == 'big' else ByteSwapped(Bytes(8))
+IPBusWords_long = GreedyRange(IPBusWord_long)
+
+
 PacketHeaderStruct = BitStruct(
     "protocol_version" / OneOf(Nibble, [IPBUS_VERSION]),
     "reserved" / OneOf(Nibble, [0x0]),
@@ -95,7 +101,8 @@ ControlStruct = "ControlTransaction" / Struct(
             ("WRITE", "REQUEST"): Array(this.header.words, _IPBusWord),
             ("NOINCWRITE", "REQUEST"): Array(this.header.words, _IPBusWord),
             ("WCONFIG", "REQUEST"): Array(this.header.words, _IPBusWord),
-            ("RMWBITS", "REQUEST"): ["and" / _IPBusWord, "or" / _IPBusWord],
+            #("RMWBITS", "REQUEST"): ["and" / _IPBusWord, "or" / _IPBusWord],
+            ("RMWBITS", "REQUEST"): Array(this.header.words, _IPBusWord_long), # ECC - unpack two words instead of one for RMWBITS
             ("RMWBITS", "SUCCESS"): _IPBusWord,
             ("RMWSUM", "REQUEST"): _IPBusWord,  # note: signed 32-bit for subtraction!
             ("RMWSUM", "SUCCESS"): _IPBusWord,
